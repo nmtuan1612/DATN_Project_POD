@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+ import mongoose from "mongoose";
 
 const ProductSchema = mongoose.Schema(
   {
@@ -7,11 +7,15 @@ const ProductSchema = mongoose.Schema(
       required: true,
     },
     categoryId: {
-      type: String,
+      type: Array({_id: String, name: String}),
       required: true,
     },
     name: {
       type: String,
+      required: true,
+    },
+    details: {
+      type: Array(String),
       required: true,
     },
     description: {
@@ -22,8 +26,19 @@ const ProductSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
-    images: Array(String),
+    image: {
+      type: String,
+      required: true,
+    },
+    otherImages: Array(String),
+    type: {
+      type: String,
+      required: true,
+    },
+    hiddenTag: String,
     isPublished: Boolean,
+    rating: Number,
+    sold: Number,
 
     variants: Array(String), // list variant ids
   },

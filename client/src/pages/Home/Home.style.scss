@@ -1,0 +1,11 @@
+.home {
+  @apply z-10 flex h-full flex-col justify-start gap-6 overflow-scroll py-4 md:py-6 xl:gap-7;
+}
+
+.home-content {
+  @apply flex flex-1 flex-col justify-start gap-10;
+}
+
+.head-text {
+  @apply rounded-tr-lg bg-white pr-4 text-[3rem] font-bold leading-[4rem] text-gray-700 xl:text-[3.2rem] xl:leading-[3.5rem];
+}

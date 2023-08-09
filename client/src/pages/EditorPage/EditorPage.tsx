@@ -2,18 +2,22 @@ import React, { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useSnapshot } from 'valtio'
 
-import config from '../config/config'
-import state from '../store'
-import { download } from '../assets'
-import { downloadCanvasToImage, reader } from '../config/helpers'
-import { EditorTabs, FilterTabs, DecalTypes } from '../config/constants'
-import { fadeAnimation, slideAnimation } from '../config/motion'
-import { AIPicker, ColorPicker, CustomButton, FilePicker, Tab } from '../components'
+import config from '../../config/config'
+import state from '../../store'
+import { download } from '../../assets'
+import { downloadCanvasToImage, reader } from '../../config/helpers'
+import { EditorTabs, FilterTabs, DecalTypes } from '../../config/constants'
+import { fadeAnimation, slideAnimation } from '../../config/motion'
+import { AIPicker, ColorPicker, CustomButton, FilePicker, Tab } from '../../components'
+import CanvasModel from 'src/canvas'
+import { useNavigate } from 'react-router-dom'
 
-const Customizer = () => {
+type Props = {}
+
+type DecalType = keyof typeof DecalTypes
+
+const EditorPage = (props: Props) => {
   const snap = useSnapshot(state)
-  console.log('snap:', snap)
-  console.log('state:', state)
 
   const [file, setFile] = useState('')
 
@@ -25,6 +29,8 @@ const Customizer = () => {
     logoTab: true,
     stylishTab: false
   })
+
+  const navigate = useNavigate()
 
   // show tab content depending on the activeTab
   const generateTabContent = () => {
@@ -42,7 +48,7 @@ const Customizer = () => {
     }
   }
 
-  const handleSubmit = async (type) => {
+  const handleSubmit = async (type: DecalType) => {
     if (!prompt) return alert('Please enter a prompt')
 
     try {
@@ -69,7 +75,7 @@ const Customizer = () => {
     }
   }
 
-  const handleDecals = (type, result) => {
+  const handleDecals = (type: DecalType, result: string) => {
     const decalType = DecalTypes[type]
 
     state[decalType.stateProperty] = result
@@ -79,7 +85,7 @@ const Customizer = () => {
     }
   }
 
-  const handleActiveFilterTab = (tabName) => {
+  const handleActiveFilterTab = (tabName: string) => {
     switch (tabName) {
       case 'logoTab':
         state.isLogoTexture = !activeFilterTab[tabName]
@@ -98,13 +104,14 @@ const Customizer = () => {
     setActiveFilterTab((prevState) => {
       return {
         ...prevState,
-        [tabName]: !prevState[tabName]
+        [tabName]: !prevState[tabName as keyof typeof activeFilterTab]
       }
     })
   }
 
-  const readFile = (type) => {
-    reader(file).then((result) => {
+  const readFile = (type: DecalType) => {
+    reader(file).then((result: any) => {
+      console.log('Read file result:', result)
       handleDecals(type, result)
       setActiveEditorTab('')
     })
@@ -112,9 +119,10 @@ const Customizer = () => {
 
   return (
     <AnimatePresence>
-      {!snap.intro && (
+      {/* <div className='h-fulloverflow-scroll container relative grid max-xl:gap-7 xl:h-full xl:py-6'> */}
+      <div className='container relative grid h-full overflow-scroll max-xl:gap-7 xl:h-full '>
         <>
-          <motion.div key='custom' className='absolute left-0 top-0 z-10' {...slideAnimation('left')}>
+          <motion.div key='custom' className='absolute left-4 top-0 z-10' {...slideAnimation('left')}>
             <div className='flex min-h-screen items-center'>
               <div className='editortabs-container tabs'>
                 {EditorTabs.map((tab) => (
@@ -130,9 +138,14 @@ const Customizer = () => {
             <CustomButton
               type='filled'
               title='Go Back'
-              handleClick={() => (state.intro = true)}
+              handleClick={() => {
+                navigate(-1)
+              }}
               customStyles='w-fit px-4 py-2.5 font-bold text-sm'
             />
+          </motion.div>
+          <motion.div className='' {...fadeAnimation}>
+            <CanvasModel />
           </motion.div>
 
           <motion.div className='filtertabs-container' {...slideAnimation('up')}>
@@ -147,9 +160,9 @@ const Customizer = () => {
             ))}
           </motion.div>
         </>
-      )}
+      </div>
     </AnimatePresence>
   )
 }
 
-export default Customizer
+export default EditorPage
