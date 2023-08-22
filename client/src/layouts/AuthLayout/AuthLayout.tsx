@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import './AuthLayout.style.scss'
+import path from 'src/config/path'
 
 type Props = {
   children?: React.ReactNode
@@ -26,6 +27,22 @@ const AuthLayout = ({ children }: Props) => {
               <li className='text-gray-500'>Variety 3D Mockups </li>
               <li className='text-gray-500'>Artificial Intelligent Integrated</li>
             </ul>
+            <Link
+              to={path.home}
+              className='mt-8 flex w-fit items-center gap-3 rounded-lg px-3 py-1 font-medium text-primary hover:bg-primary hover:text-white focus:outline-none md:px-3 md:py-1.5'
+            >
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                fill='none'
+                viewBox='0 0 24 24'
+                strokeWidth={1.5}
+                stroke='currentColor'
+                className='h-6 w-6'
+              >
+                <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75' />
+              </svg>
+              Back to Home page
+            </Link>
           </div>
         </div>
       </div>

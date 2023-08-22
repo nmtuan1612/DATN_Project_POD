@@ -1,0 +1,39 @@
+.editorTabs-container {
+  @apply flex h-full min-w-fit gap-2 rounded-lg bg-white py-4 transition-all duration-1000 ease-in;
+}
+
+.filtertabs-container {
+  @apply absolute bottom-5 left-0 right-0 z-10 flex w-full flex-wrap items-center justify-center gap-4;
+}
+
+.colorPicker-container {
+  @apply flex flex-col gap-2 pt-[10px];
+}
+
+.aipicker-container {
+  @apply flex  w-[220px] flex-col gap-4 rounded-md p-[10px];
+}
+
+.aipicker-textarea {
+  @apply w-full flex-1 rounded-lg border border-gray-300 bg-transparent p-2 text-sm outline-none;
+}
+
+.filepicker-container {
+  @apply flex w-[220px] flex-col gap-4 rounded-md p-3 transition-all duration-1000 ease-in;
+}
+
+.filepicker-label {
+  @apply flex w-full cursor-pointer flex-col items-center gap-1 rounded-md border border-dashed border-gray-300  p-2 text-xs text-gray-700 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary;
+}
+
+.download-btn {
+  @apply glassmorphism flex h-14 w-14 cursor-pointer items-center justify-center rounded-full outline-none;
+}
+
+.glassmorphism {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 2px 30px 0 rgba(31, 38, 135, 0.07);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}

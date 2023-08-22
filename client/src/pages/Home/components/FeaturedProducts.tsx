@@ -1,11 +1,12 @@
 import React, { ReactNode, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import ProductCard from 'src/components/ProductCard/ProductCard'
+import { AppUrls } from 'src/config/config'
 import { productMockData } from 'src/config/mockData'
 import { Product } from 'src/types/product.type'
 
 type Props = {
-  title: string | ReactNode
+  title: string
   hiddenTag: string
 }
 
@@ -26,7 +27,7 @@ const FeaturedProducts = ({ title, hiddenTag }: Props) => {
         </div>
         <div className='col-span-2 flex items-center justify-end lg:col-span-1'>
           <Link
-            to='#'
+            to={AppUrls.categoryProduct(title.replace(' ', '-'))}
             className='flex items-center gap-3 rounded-lg px-3 py-1 font-medium text-primary hover:bg-primary hover:text-white focus:outline-none md:px-3 md:py-1.5'
           >
             View All

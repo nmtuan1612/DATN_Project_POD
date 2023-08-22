@@ -1,14 +1,19 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose'
 
 const StoreSchema = mongoose.Schema(
   {
-    owner_id: {
+    ownerId: {
       type: String,
-      required: true,
+      required: true
     },
-    store_name: {
+    storeName: {
       type: String,
-      required: true,
+      required: true
+    },
+    logo: String,
+    storeDescription: {
+      type: String,
+      required: true
     },
     //   store_address: {
     //     type: String,
@@ -16,15 +21,15 @@ const StoreSchema = mongoose.Schema(
     //   },
     products: {
       type: Array(String),
-      required: true,
+      required: true
     }, // [ObjectId("product_id")]
     orders: {
       type: Array(String),
-      required: true,
-    }, //[ObjectId("order_id")]
+      required: true
+    } //[ObjectId("order_id")]
   },
   { timestamps: true }
-);
+)
 
-const StoreModel = mongoose.model("Store", StoreSchema);
-export default StoreModel;
+const StoreModel = mongoose.model('Store', StoreSchema)
+export default StoreModel

@@ -1,5 +1,9 @@
-import express from "express";
+import express from 'express'
+import { getUser, updateUser } from '../MongoDB/controllers/UserController.js'
+import tokenMiddleWare from '../MiddleWare/VerifyAccessToken.js'
 
-const Router = express.Router();
+const UserRouter = express.Router()
+UserRouter.get('/', getUser, tokenMiddleWare)
+UserRouter.put('/', updateUser, tokenMiddleWare)
 
-export default Router;
+export default UserRouter

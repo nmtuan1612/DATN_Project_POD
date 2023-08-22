@@ -51,62 +51,27 @@ html {
   }
 }
 
-.download-btn {
-  @apply glassmorphism flex h-14 w-14 cursor-pointer items-center justify-center rounded-full outline-none;
-}
-
-.editortabs-container {
-  @apply glassmorphism ml-1 flex w-16 flex-col items-center justify-center gap-4 rounded-lg border-[2px] py-4;
-}
-
-.filtertabs-container {
-  @apply absolute bottom-5 left-0 right-0 z-10 flex w-full flex-wrap items-center justify-center gap-4;
-}
-
-.aipicker-container {
-  @apply glassmorphism absolute left-full ml-3 flex h-[220px] w-[195px] flex-col gap-4 rounded-md p-3;
-}
-
-.aipicker-textarea {
-  @apply w-full flex-1 border border-gray-300 bg-transparent p-2 text-sm outline-none;
-}
-
-.filepicker-container {
-  @apply glassmorphism absolute left-full ml-3 flex h-[220px] w-[195px] flex-col rounded-md p-3;
-}
-
-.filepicker-label {
-  @apply w-fit cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-xs text-gray-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500;
-}
-
-.tab-btn {
-  @apply flex h-14 w-14 cursor-pointer select-none items-center justify-center;
-}
-
-.glassmorphism {
-  background: rgba(255, 255, 255, 0.25);
-  box-shadow: 0 2px 30px 0 rgba(31, 38, 135, 0.07);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-}
-
 input[type='file'] {
   z-index: -1;
   position: absolute;
   opacity: 0;
 }
 
+.side__nav-icon > svg {
+  @apply h-5 w-5;
+}
+
 .sketch-picker {
-  width: 170px !important;
+  // width: 170px !important;
   background: rgba(255, 255, 255, 0.25) !important;
-  box-shadow: 0 2px 30px 0 rgba(31, 38, 135, 0.07) !important;
+  // box-shadow: 0 2px 30px 0 rgba(31, 38, 135, 0.07) !important;
+  box-shadow: none !important;
   backdrop-filter: blur(4px) !important;
   -webkit-backdrop-filter: blur(4px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  // border: 1px solid rgba(255, 255, 255, 0.18) !important;
   border-radius: 6px !important;
 }
 
 .sketch-picker > div:nth-child(3) {
-  display: none !important;
+  // display: none !important;
 }

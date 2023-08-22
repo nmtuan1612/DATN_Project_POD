@@ -12,10 +12,14 @@ type Props = {
 const AIPicker = ({ prompt, setPrompt, generatingImg, handleSubmit }: Props) => {
   return (
     <div className='aipicker-container'>
+      <label className='text-base font-semibold text-gray-600' htmlFor='prompt-input'>
+        Custom with AI
+      </label>
       <textarea
-        placeholder='Ask AI...'
+        placeholder='Enter your idea...'
         rows={5}
         value={prompt}
+        id='prompt-input'
         onChange={(e) => setPrompt(e.target.value)}
         className='aipicker-textarea'
       />
@@ -27,6 +31,7 @@ const AIPicker = ({ prompt, setPrompt, generatingImg, handleSubmit }: Props) => 
             <CustomButton
               type='outline'
               title='AI Logo'
+              disabled={!prompt}
               handleClick={() => handleSubmit('logo')}
               customStyles='text-xs'
             />
@@ -34,6 +39,7 @@ const AIPicker = ({ prompt, setPrompt, generatingImg, handleSubmit }: Props) => 
             <CustomButton
               type='filled'
               title='AI Full'
+              disabled={!prompt}
               handleClick={() => handleSubmit('full')}
               customStyles='text-xs'
             />

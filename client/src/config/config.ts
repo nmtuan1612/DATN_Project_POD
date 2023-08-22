@@ -4,7 +4,7 @@ export const AppUrls = {
   register: '/register',
   logout: '/logout',
   helpAndSupport: '/help',
-  userDetail: '/user/detail',
+  // userDetail: '/user/detail',
   userSetting: '/user/setting',
   userStores: '/user/my-stores',
   userOrders: '/user/orders',
@@ -30,11 +30,13 @@ export const AppUrls = {
 
 const config = {
   development: {
-    backendUrl: 'http://localhost:8080/api/v1/dalle'
+    // backendUrl: 'http://localhost:8080/api/v1/dalle'
+    backendUrl: 'http://localhost:8080/api/v1'
   },
   production: {
     backendUrl: 'https://devswag.onrender.com/api/v1/dalle'
-  }
+  },
+  maxSizeUploadAvatar: 1048576 // bytes
 }
 
 export default config

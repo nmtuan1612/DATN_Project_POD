@@ -2,18 +2,27 @@ import { CartItem } from './cart.type'
 
 type Role = 'USER' | 'ADMIN'
 
-export interface UserModel {
+export interface User {
+  _id: string
+  businessName?: string
   fullName: string
   email: string
-  password: string
-  phoneNumber: string
-  profilePicture: string
+  // password: string
+  address?: {
+    country: string
+    city: string
+    province: string
+    addressDetail: string
+    zipCode: string
+  }
+  phoneNumber?: string
+  profilePicture?: string
   roles: Role[]
-  listStore: string[]
-  cart: CartItem[]
+  listStore?: string[]
+  cart?: CartItem[]
 }
 
-export interface User {
+export interface UserModel {
   name: string
   email: string
   aud: string

@@ -1,6 +1,10 @@
 import { mongoose } from "mongoose";
 const UserSchema = mongoose.Schema(
   {
+    businessName: {
+      type: String,
+      // required: true,
+    },
     fullName: {
       type: String,
       required: true,
@@ -11,20 +15,30 @@ const UserSchema = mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
+      // required: true,
+    },
+    address: {
+      type: {
+        country: String,
+        city: String,
+        province: String,
+        addressDetail: String,
+        zipCode: String || Number
+      }
     },
     phoneNumber: {
       type: String,
-      required: true,
+      // required: true,
     },
     profilePicture: String,
     roles: {
       type: Array(String),
       required: true,
     },
+    
     listStore: {
       type: Array(String),
-      required: true,
+      // required: true,
     },
     cart: [
       {

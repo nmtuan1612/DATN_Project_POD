@@ -8,7 +8,8 @@ const ColorPicker = () => {
   const snap = useSnapshot(state)
 
   return (
-    <div className='absolute left-full ml-3'>
+    <div className='colorPicker-container'>
+      <h2 className='pl-[10px] text-base font-semibold text-gray-600'>Pick color</h2>
       <SketchPicker color={snap.color} disableAlpha onChange={(color) => (state.color = color.hex)} />
     </div>
   )

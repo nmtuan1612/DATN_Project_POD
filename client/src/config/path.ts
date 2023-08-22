@@ -4,13 +4,14 @@ const path = {
   register: '/register',
   logout: '/logout',
   helpAndSupport: '/help',
+  user: '/user',
   userDetail: '/user/detail',
   userSetting: '/user/setting',
   userStores: '/user/my-stores',
   userOrders: '/user/orders',
   userOrderDetail: '/user/order/:orderId',
   // shop
-  shop: '/shops',
+  shop: '/shop',
   createShop: '/shop/create',
   shopDetail: '/shop/:shopId',
   shopSetting: '/shop/:shopId/setting',
@@ -19,6 +20,7 @@ const path = {
   shopOrderDetail: '/shop/:shopId/order/:orderId',
   shopEditOrder: '/shop/edit-order/:orderId',
   // product
+  category: '/category',
   categoryProduct: '/category/:categoryId',
   productDetail: '/products/:productId',
   editProduct: '/products/editor/:productId',

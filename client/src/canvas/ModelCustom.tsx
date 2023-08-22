@@ -9,7 +9,7 @@ import state from '../store'
 const ModelCustom = () => {
   const snap = useSnapshot(state)
   const { nodes, materials }: any = useGLTF<string>('/shirt_baked.glb')
-  console.log(materials)
+  // console.log(materials)
 
   const logoTexture = useTexture(snap.logoDecal)
   const fullTexture = useTexture(snap.fullDecal)

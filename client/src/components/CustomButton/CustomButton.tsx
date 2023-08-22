@@ -10,11 +10,13 @@ type ButtonType = 'filled' | 'outline'
 type Props = {
   type: ButtonType
   title: string | ReactNode
+  disabled?: boolean
   customStyles?: string
+  isSubmitButton?: boolean
   handleClick?: () => any
 }
 
-const CustomButton = ({ type, title, customStyles, handleClick }: Props) => {
+const CustomButton = ({ type, title, disabled, customStyles, isSubmitButton, handleClick }: Props) => {
   const snap = useSnapshot(state)
 
   const generateStyle = (type: ButtonType) => {
@@ -39,9 +41,11 @@ const CustomButton = ({ type, title, customStyles, handleClick }: Props) => {
 
   return (
     <button
-      className={`rounded-lg border-[1px] px-4 py-2 text-sm font-medium hover:opacity-80 focus:outline-none md:px-5 md:py-2.5 ${customStyles}`}
+      className={`rounded-lg border-[1px] px-4 py-2 text-sm font-medium hover:opacity-80 focus:outline-none disabled:cursor-not-allowed disabled:opacity-80 md:px-5 md:py-2.5 ${customStyles}`}
       style={generateStyle(type)}
+      disabled={disabled}
       onClick={handleClick}
+      type={isSubmitButton ? 'submit' : 'button'}
     >
       {title}
     </button>
