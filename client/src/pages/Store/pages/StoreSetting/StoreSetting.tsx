@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useContext, useEffect, useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { set, useForm } from 'react-hook-form'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import commonApi from 'src/apis/common.api'
@@ -52,6 +52,8 @@ const StoreSetting = (props: Props) => {
 
   useEffect(() => {
     if (store) {
+      setCurrentStore(store)
+      setStoreToLS(store)
       setValue('storeName', store.storeName)
       setValue('storeDescription', store.storeDescription)
       setValue('logo', store.logo)
