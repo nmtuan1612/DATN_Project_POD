@@ -10,11 +10,11 @@ export const AppUrls = {
   userOrders: '/user/orders',
   userOrderDetail: '/user/order/:orderId',
   // shop
-  shop: '/shops',
-  createShop: '/shop/create',
-  shopDetail: (shopId: string) => '/shop/' + shopId,
+  shop: '/shop',
+  createShop: '/create-shop',
+  shopDetail: (shopId: string) => '/shop-detail/' + shopId,
   shopSetting: (shopId: string) => `/shop/${shopId}/setting`,
-  shopManageProduct: (shopId: string) => `/shop/${shopId}/products`,
+  shopManageProducts: (shopId: string) => `/shop/${shopId}/my-products`,
   shopManageOrder: (shopId: string) => `/shop/${shopId}/orders`,
   shopOrderDetail: (shopId: string, orderId: string) => `/shop/${shopId}/order/${orderId}`,
   shopEditOrder: (orderId: string) => `/shop/edit-order/${orderId}`,
@@ -30,11 +30,13 @@ export const AppUrls = {
 
 const config = {
   development: {
-    // backendUrl: 'http://localhost:8080/api/v1/dalle'
-    backendUrl: 'http://localhost:8080/api/v1'
+    // frontendUrl: 'http://localhost:5173',
+    // backendUrl: 'http://localhost:8080/api/v1'
+    frontendUrl: 'https://creoprint.netlify.app',
+    backendUrl: 'https://pod-creoprint.onrender.com/api/v1'
   },
   production: {
-    backendUrl: 'https://devswag.onrender.com/api/v1/dalle'
+    backendUrl: 'https://pod-creoprint.onrender.com/api/v1'
   },
   maxSizeUploadAvatar: 1048576 // bytes
 }

@@ -1,5 +1,3 @@
-export const storeData = ['My store 2', 'My store 3', 'My store 4']
-
 export const productMockData = {
   _id: '123',
   ownerId: 'string',

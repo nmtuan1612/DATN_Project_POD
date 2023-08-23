@@ -40,7 +40,7 @@ const UserSideNav = (props: Props) => {
                 className={classNames(
                   'text mt-3 flex items-center gap-2 rounded-lg p-3 text-gray-700 hover:bg-gray-100',
                   {
-                    'bg-gray-100': isActive,
+                    'bg-gray-100 text-primary': isActive,
                     'bg-white': !isActive
                   }
                 )}

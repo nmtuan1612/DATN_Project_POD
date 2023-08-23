@@ -1,21 +1,23 @@
 import React, { useContext } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { storeData } from 'src/config/mockData'
 import { AppContext } from 'src/context/app.context'
 import { clearLS } from 'src/utils/auth'
-import { NavbarLinks, UserOptions, primaryColor } from '../../config/constants'
+import { Categories, NavbarLinks, UserOptions, primaryColor } from '../../config/constants'
 import path from '../../config/path'
 import CustomButton from '../CustomButton/CustomButton'
 import Dropdown from '../Dropdown/Dropdown'
 import UserImg from 'src/assets/user.svg'
 import './Header.style.scss'
+import useMyStores from 'src/hooks/useMyStores'
+import { AppUrls } from 'src/config/config'
 
 type Props = {}
 
 const Header = (props: Props) => {
+  const { isAuthenticated, profile, setIsAuthenticated, setProfile } = useContext(AppContext)
+  const [storeList] = useMyStores()
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const { isAuthenticated, profile, setIsAuthenticated, setProfile } = useContext(AppContext)
 
   const handleSignOut = () => {
     setIsAuthenticated(false)
@@ -56,14 +58,14 @@ const Header = (props: Props) => {
                     classStyleOptions='my-2 min-w-max list-none divide-y divide-gray-100 rounded-lg bg-white text-base shadow-around'
                     options={() => (
                       <>
-                        <div className='px-4 py-3'>
-                          <span className='block text-sm text-gray-900'>My store 1</span>
+                        <div className='px-4 py-2'>
+                          <span className='block text-base text-gray-900'>My store</span>
                         </div>
-                        <ul className='py-2' aria-labelledby='store-menu-button'>
-                          {storeData.map((store) => (
-                            <li key={store}>
+                        <ul className='max-h-52 overflow-y-scroll py-2' aria-labelledby='store-menu-button'>
+                          {storeList.map((store) => (
+                            <li key={store?._id}>
                               <Link
-                                to='#'
+                                to={AppUrls.shopSetting(store?._id)}
                                 className='flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
                               >
                                 <svg
@@ -80,7 +82,7 @@ const Header = (props: Props) => {
                                     d='M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z'
                                   />
                                 </svg>
-                                {store}
+                                {store.storeName}
                               </Link>
                             </li>
                           ))}
@@ -140,7 +142,7 @@ const Header = (props: Props) => {
                         d='M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z'
                       />
                     </svg>
-                    <span className='mx-4'>My store 1</span>
+                    <span className='mx-4'>My store</span>
                     <svg
                       className='ml-2.5 h-2.5 w-2.5 transition-transform group-hover:rotate-180'
                       aria-hidden='true'
@@ -230,16 +232,16 @@ const Header = (props: Props) => {
           </div>
           <div id='mega-menu' className='hidden w-full items-center justify-between md:order-1 md:flex md:w-auto'>
             <ul className='mt-4 flex flex-col font-medium md:mt-0 md:flex-row md:space-x-8'>
-              <li className=''>
+              <li className='group relative'>
                 <button
                   id='mega-menu-dropdown-button'
-                  data-dropdown-toggle='mega-menu-dropdown'
-                  data-dropdown-trigger='hover'
-                  className='nav__link-item group flex w-full items-center justify-between font-medium md:w-auto'
+                  // data-dropdown-toggle='mega-menu-dropdown'
+                  // data-dropdown-trigger='hover'
+                  className='nav__link-item flex w-full items-center justify-between font-medium md:w-auto'
                   style={pathname.startsWith('/products') || pathname === '/' ? { color: primaryColor } : {}}
                   onClick={() => navigate('/')}
                 >
-                  Categories{' '}
+                  Mega Menu{' '}
                   <svg
                     className='ml-2.5 h-2.5 w-2.5 transition-transform group-hover:rotate-180'
                     aria-hidden='true'
@@ -258,51 +260,38 @@ const Header = (props: Props) => {
                 </button>
                 <div
                   id='mega-menu-dropdown'
-                  className='z-30 grid hidden max-w-screen-xl grid-cols-2 rounded-lg border border-gray-100 bg-white text-sm shadow-md md:grid-cols-3'
+                  className='absolute top-full z-30 hidden min-w-max max-w-screen-xl grid-cols-2 whitespace-nowrap rounded-lg border border-gray-100 bg-white text-sm shadow-md group-hover:grid md:grid-cols-3'
                 >
                   <div className='p-4 pb-0 text-gray-900 md:pb-4'>
-                    <ul className='space-y-4' aria-labelledby='mega-menu-dropdown-button'>
-                      <li>
-                        <Link to='#' className='text-gray-500 hover:text-blue-600'>
-                          About Us
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to='#' className='text-gray-500 hover:text-blue-600'>
-                          Library
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to='#' className='text-gray-500 hover:text-blue-600'>
-                          Resources
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to='#' className='text-gray-500 hover:text-blue-600'>
-                          Pro Version
-                        </Link>
-                      </li>
+                    <ul className='space-y-4'>
+                      {Categories.map((category) => (
+                        <li key={category.id}>
+                          <Link to={AppUrls.categoryProduct(category.id)} className='text-gray-500 hover:text-primary'>
+                            {category.name}
+                          </Link>
+                        </li>
+                      ))}
                     </ul>
                   </div>
                   <div className='p-4 pb-0 text-gray-900 md:pb-4'>
                     <ul className='space-y-4'>
                       <li>
-                        <Link to='#' className='text-gray-500 hover:text-blue-600'>
-                          Blog
+                        <Link to={AppUrls.categoryProduct('Bestsellers')} className='text-gray-500 hover:text-primary'>
+                          Bestsellers
                         </Link>
                       </li>
                       <li>
-                        <Link to='#' className='text-gray-500 hover:text-blue-600'>
-                          Newsletter
+                        <Link to={AppUrls.categoryProduct('New-Arrivals')} className='text-gray-500 hover:text-primary'>
+                          New Arrivals
                         </Link>
                       </li>
                       <li>
-                        <Link to='#' className='text-gray-500 hover:text-blue-600'>
-                          Playground
+                        <Link to={AppUrls.categoryProduct('Eco-friendly')} className='text-gray-500 hover:text-primary'>
+                          Eco-friendly
                         </Link>
                       </li>
                       <li>
-                        <Link to='#' className='text-gray-500 hover:text-blue-600'>
+                        <Link to='#' className='text-gray-500 hover:text-primary'>
                           License
                         </Link>
                       </li>
@@ -311,17 +300,17 @@ const Header = (props: Props) => {
                   <div className='p-4'>
                     <ul className='space-y-4'>
                       <li>
-                        <Link to='#' className='text-gray-500 hover:text-blue-600'>
+                        <Link to='#' className='text-gray-500 hover:text-primary'>
                           Contact Us
                         </Link>
                       </li>
                       <li>
-                        <Link to='#' className='text-gray-500 hover:text-blue-600'>
+                        <Link to='#' className='text-gray-500 hover:text-primary'>
                           Support Center
                         </Link>
                       </li>
                       <li>
-                        <Link to='#' className='text-gray-500 hover:text-blue-600'>
+                        <Link to='#' className='text-gray-500 hover:text-primary'>
                           Terms
                         </Link>
                       </li>

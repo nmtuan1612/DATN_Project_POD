@@ -1,20 +1,20 @@
-import { mongoose } from "mongoose";
+import { mongoose } from 'mongoose'
 const UserSchema = mongoose.Schema(
   {
     businessName: {
-      type: String,
+      type: String
       // required: true,
     },
     fullName: {
       type: String,
-      required: true,
+      required: true
     },
     email: {
       type: String,
-      required: true,
+      required: true
     },
     password: {
-      type: String,
+      type: String
       // required: true,
     },
     address: {
@@ -27,34 +27,34 @@ const UserSchema = mongoose.Schema(
       }
     },
     phoneNumber: {
-      type: String,
+      type: String
       // required: true,
     },
     profilePicture: String,
     roles: {
       type: Array(String),
-      required: true,
+      required: true
     },
-    
-    listStore: {
-      type: Array(String),
-      // required: true,
-    },
+
+    // listStore: {
+    //   type: Array(String),
+    //   // required: true,
+    // },
     cart: [
       {
         variantId: {
           type: String,
-          required: true,
+          required: true
         },
         quantity: {
           type: Number,
-          required: true,
-        },
-      },
-    ],
+          required: true
+        }
+      }
+    ]
   },
   { timestamps: true }
-);
+)
 
-const UserModel = mongoose.model("User", UserSchema);
-export default UserModel;
+const UserModel = mongoose.model('User', UserSchema)
+export default UserModel

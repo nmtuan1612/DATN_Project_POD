@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CustomButton } from 'src/components'
 import InputSearch from 'src/components/InputSearch/InputSearch'
@@ -22,6 +22,7 @@ const ProductDetail = (props: Props) => {
     id: 0
   })
 
+  const aboutRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
 
   const settings = {
@@ -64,6 +65,10 @@ const ProductDetail = (props: Props) => {
         }
       }
     ]
+  }
+
+  const handleViewAbout = () => {
+    aboutRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
   return (
@@ -119,7 +124,10 @@ const ProductDetail = (props: Props) => {
               <li>Tear-away label</li>
             </ul>
             <div className='flex items-center gap-6'>
-              <span className='text-md cursor-pointer font-medium text-primary hover:text-purple-300'>
+              <span
+                className='text-md cursor-pointer font-medium text-primary hover:text-purple-300'
+                onClick={handleViewAbout}
+              >
                 More details
               </span>
               <CustomButton
@@ -186,7 +194,7 @@ const ProductDetail = (props: Props) => {
 
           <div className='col-span-6'>
             {/* About */}
-            <div className='col-span-6 grid grid-cols-6 border-b py-8 text-gray-900'>
+            <div ref={aboutRef} className='col-span-6 grid grid-cols-6 border-b py-8 text-gray-900'>
               <h2 className='text-2xl font-semibold lg:col-span-2'>About</h2>
               <p className='col-span-6 text-justify text-base lg:col-span-4'>{product.description}</p>
             </div>

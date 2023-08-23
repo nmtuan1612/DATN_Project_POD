@@ -25,7 +25,7 @@ export const login = async (req, res) => {
       }
       res.status(200).json({
         message: 'Login was successful',
-        user: oldUser,
+        user: otherDetails,
         access_token: jwt.sign({ email: profile?.email }, process.env.JWT_SECRET, {
           expiresIn: '1d'
         })
@@ -62,7 +62,7 @@ export const login = async (req, res) => {
     })
   }
 }
-
+// Register user
 export const register = async (req, res) => {
   try {
     if (req.body.credential) {
@@ -82,7 +82,6 @@ export const register = async (req, res) => {
         phoneNumber: '',
         profilePicture: profile.picture,
         roles: ['USER'],
-        listStore: [],
         cart: []
       }
 

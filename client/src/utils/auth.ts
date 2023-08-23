@@ -1,3 +1,4 @@
+import { Store } from 'src/types/store.type'
 import { User } from 'src/types/user.type'
 
 export const LocalStorageEventTarget = new EventTarget()
@@ -29,4 +30,13 @@ export const getProfileFromLS = (): User => {
 
 export const setProfileToLS = (profile: User) => {
   localStorage.setItem('profile', JSON.stringify(profile))
+}
+
+export const setStoreToLS = (store: Store) => {
+  localStorage.setItem('curr_store', JSON.stringify(store))
+}
+
+export const getStoreFromLS = (): Store => {
+  const store = localStorage.getItem('curr_store')
+  return store ? JSON.parse(store) : null
 }

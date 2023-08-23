@@ -116,7 +116,7 @@ const UserDetail = (props: Props) => {
 
   return (
     <div className='container'>
-      <h2 className='text-2xl font-semibold text-gray-900'>Account details</h2>
+      <h2 className='text-2xl font-semibold text-gray-900'>Account Details</h2>
       <form className='mt-8 flex flex-col' onSubmit={onSubmit}>
         <div className='w-full'>
           <h3 className='mb-3 text-lg font-semibold text-gray-900'>Business Name</h3>
@@ -234,19 +234,14 @@ const UserDetail = (props: Props) => {
             handleClick={onCancel}
             customStyles='mr-1 text-gray-800 hover:bg-gray-50 focus:outline-none md:mr-2'
           />
-          <button
-            type='submit'
-            className={`mr-1 rounded-lg border-[1px] bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/80 hover:opacity-80 focus:outline-none disabled:cursor-not-allowed disabled:opacity-80 md:mr-2 md:px-5 md:py-2.5`}
-          >
-            Save
-          </button>
-          {/* <CustomButton
+          <CustomButton
             title='Save'
             type='filled'
-            // disabled
-            handleClick={() => {}}
-            customStyles='mr-1 bg-primary text-white hover:bg-primary/80 focus:outline-none md:mr-2'
-          /> */}
+            isSubmitButton={true}
+            isLoading={updateAccountMutation.isLoading}
+            disabled={updateAccountMutation.isLoading}
+            customStyles={`mr-1 rounded-lg border-[1px] bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/80 hover:opacity-80 focus:outline-none disabled:cursor-not-allowed disabled:opacity-80 md:mr-2 md:px-5 md:py-2.5`}
+          />
         </div>
       </form>
     </div>

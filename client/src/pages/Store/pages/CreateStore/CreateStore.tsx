@@ -1,17 +1,30 @@
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation } from '@tanstack/react-query'
 import classNames from 'classnames'
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useContext } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import commonApi from 'src/apis/common.api'
+import storeApi from 'src/apis/store.api'
 import { CustomButton } from 'src/components'
 import BreadCrumbs from 'src/components/BreadCrumbs/BreadCrumbs'
 import Input from 'src/components/Input'
 import InputFile from 'src/components/InputFile'
-import { getLogoUrl } from 'src/utils/utils'
+import config, { AppUrls } from 'src/config/config'
+import path from 'src/config/path'
+import { AppContext } from 'src/context/app.context'
+import { setStoreToLS } from 'src/utils/auth'
+import { StoreSchema, storeSchema } from 'src/utils/rules'
+import { getLogoUrl, isAxiosError } from 'src/utils/utils'
 
 type Props = {}
 
 const CreateStore = (props: Props) => {
+  const { profile, setCurrentStore } = useContext(AppContext)
   const [file, setFile] = useState<File>()
+
+  const navigate = useNavigate()
 
   const previewImage = useMemo(() => {
     return file ? URL.createObjectURL(file) : ''
@@ -24,14 +37,59 @@ const CreateStore = (props: Props) => {
     handleSubmit,
     setValue,
     setError
-  } = useForm({})
+  } = useForm<StoreSchema>({
+    resolver: yupResolver<StoreSchema>(storeSchema)
+  })
+
+  const storeMutation = useMutation({ mutationFn: storeApi.createStore })
+
   const logo = watch('logo')
   const storeName = watch('storeName')
   const storeDescription = watch('storeDescription')
   const acceptTerm = watch('acceptTerm')
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data)
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      let logoUrl = ''
+      if (file) {
+        const form = new FormData()
+        const fileName = Date.now() + file.name
+        form.append('name', fileName)
+        form.append('file', file)
+        const { data: uploadResponse } = await commonApi.uploadImage(form)
+        logoUrl = uploadResponse?.url || ''
+        setValue('logo', uploadResponse?.url || '')
+      }
+      const { acceptTerm, ...otherDetails } = data
+      await storeMutation.mutateAsync(
+        {
+          ...otherDetails,
+          ownerId: profile?._id || '',
+          logo: logoUrl
+        },
+        {
+          onSuccess: (data) => {
+            toast.success(data.data?.message)
+            const link = document.createElement('a')
+            link.setAttribute('href', `${config.development.frontendUrl}${AppUrls.shopDetail(data.data.data._id)}`)
+            link.setAttribute('target', '_blank')
+            link.click()
+            setCurrentStore(data.data?.data)
+            setStoreToLS(data.data?.data)
+
+            navigate(AppUrls.shopManageProducts(data.data?.data?._id))
+          },
+          onError(error) {
+            if (isAxiosError(error)) {
+              toast.error((error.response?.data as string) || '')
+              setError('storeName', { message: error.response?.data as string })
+            }
+          }
+        }
+      )
+    } catch (error) {
+      console.log(error)
+    }
   })
 
   const handleChangeFile = (file?: File) => {
@@ -112,7 +170,7 @@ const CreateStore = (props: Props) => {
                   name='storeName'
                   id='store-name'
                   register={register}
-                  //   errorMessage={errors.storeName?.message}
+                  errorMessage={errors.storeName?.message}
                   classNameInput='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-700 focus:border-primary focus:outline-none focus:ring-0'
                   placeholder='Your store name'
                   autoComplete='on'
@@ -195,7 +253,7 @@ const CreateStore = (props: Props) => {
                     }
                   )}
                 />
-                <p className='mt-1 min-h-[1.25rem] text-sm text-red-600'>{/* {errors.email?.message} */}</p>
+                <p className='mt-1 min-h-[1.25rem] text-sm text-red-600'>{errors.storeDescription?.message}</p>
               </div>
             </div>
           </li>
@@ -261,14 +319,16 @@ const CreateStore = (props: Props) => {
                     when creating a CreoPrint store.
                   </label>
                 </div>
+                <p className='mt-1 min-h-[1.25rem] text-sm text-red-600'>{errors.acceptTerm?.message}</p>
               </div>
 
               <div className=''>
                 <CustomButton
                   type='filled'
                   title='Create store'
-                  isSubmitButton
-                  disabled={!acceptTerm}
+                  isSubmitButton={true}
+                  isLoading={storeMutation.isLoading}
+                  disabled={!acceptTerm || storeMutation.isLoading}
                   customStyles='float-right'
                 />
               </div>

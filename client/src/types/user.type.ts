@@ -18,8 +18,10 @@ export interface User {
   phoneNumber?: string
   profilePicture?: string
   roles: Role[]
-  listStore?: string[]
+  // listStore?: string[]
   cart?: CartItem[]
+  createdAt: string
+  updatedAt: string
 }
 
 export interface UserModel {

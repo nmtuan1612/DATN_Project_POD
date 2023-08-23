@@ -204,3 +204,18 @@ const EditorPage = (props: Props) => {
 }
 
 export default EditorPage
+
+{
+  /* <button
+  className="share"
+  style={{ background: snap.color }}
+  onClick={() => {
+    const link = document.createElement('a')
+    link.setAttribute('download', 'canvas.png')
+    link.setAttribute('href', document.querySelector('canvas').toDataURL('image/png').replace('image/png', 'image/octet-stream'))
+    link.click()
+  }}>
+  DOWNLOAD
+  <AiFillCamera size="1.3em" />
+</button> */
+}

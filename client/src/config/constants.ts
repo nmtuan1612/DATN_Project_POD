@@ -1,23 +1,30 @@
 import { swatch, fileIcon, ai, logoShirt, stylishShirt, men, women, homeAndLiving, accessories } from '../assets'
+import { AppUrls } from './config'
 import path from './path'
 
 export const primaryColor = '#955de6'
 
+// NavLinks
 export const NavbarLinks = [
+  // {
+  //   title: 'My products',
+  //   url: path.shopManageProduct
+  // },
+  // {
+  //   title: 'Orders',
+  //   url: path.userOrders
+  // },
   {
-    title: 'My products',
-    url: path.shopManageProduct
+    title: 'Term',
+    url: path.term
   },
   {
-    title: 'Orders',
-    url: path.userOrders
-  },
-  {
-    title: 'Help & Support',
-    url: path.helpAndSupport
+    title: 'Support Center',
+    url: path.supportCenter
   }
 ] as const
 
+// UserOptions
 export const UserOptions = [
   {
     name: 'Account Details',
@@ -48,6 +55,33 @@ export const UserOptions = [
   }
 ] as const
 
+// Store options
+export const StoreOptions = [
+  {
+    name: 'My Products',
+    url: AppUrls.shopManageProducts,
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M7.875 14.25l1.214 1.942a2.25 2.25 0 001.908 1.058h2.006c.776 0 1.497-.4 1.908-1.058l1.214-1.942M2.41 9h4.636a2.25 2.25 0 011.872 1.002l.164.246a2.25 2.25 0 001.872 1.002h2.092a2.25 2.25 0 001.872-1.002l.164-.246A2.25 2.25 0 0116.954 9h4.636M2.41 9a2.25 2.25 0 00-.16.832V12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 12V9.832c0-.287-.055-.57-.16-.832M2.41 9a2.25 2.25 0 01.382-.632l3.285-3.832a2.25 2.25 0 011.708-.786h8.43c.657 0 1.281.287 1.709.786l3.284 3.832c.163.19.291.404.382.632M4.5 20.25h15A2.25 2.25 0 0021.75 18v-2.625c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125V18a2.25 2.25 0 002.25 2.25z" />
+    </svg>`
+  },
+  {
+    name: 'Orders',
+    url: AppUrls.shopManageOrder,
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+    </svg>`
+  },
+  {
+    name: 'Settings',
+    url: AppUrls.shopSetting,
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+    </svg>`
+  }
+]
+
+// Categories
 export const Categories = [
   {
     name: "Men's Clothes",
@@ -71,6 +105,7 @@ export const Categories = [
   }
 ]
 
+// EditorTabs
 export const EditorTabs = [
   {
     name: 'colorpicker',
@@ -89,6 +124,7 @@ export const EditorTabs = [
   }
 ] as const
 
+// Filter tabs
 export const FilterTabs = [
   {
     name: 'logoTab',
@@ -157,7 +193,6 @@ export const ShippingLocations = [
 ]
 
 // Sortby filters
-
 export const SortByFilters = [
   { title: 'Popularity', id: 'popularity' },
   { title: 'Lowest price', id: 'lowest_price' },

@@ -15,17 +15,21 @@ const StoreSchema = mongoose.Schema(
       type: String,
       required: true
     },
+    isActive: {
+      type: Boolean,
+      required: true
+    },
     //   store_address: {
     //     type: String,
     //     required: true,
     //   },
     products: {
-      type: Array(String),
-      required: true
+      type: Array(String)
+      // required: true
     }, // [ObjectId("product_id")]
     orders: {
-      type: Array(String),
-      required: true
+      type: Array(String)
+      // required: true
     } //[ObjectId("order_id")]
   },
   { timestamps: true }

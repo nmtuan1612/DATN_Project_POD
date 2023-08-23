@@ -57,6 +57,10 @@ input[type='file'] {
   opacity: 0;
 }
 
+.tab__title {
+  @apply text-2xl font-semibold text-gray-900;
+}
+
 .side__nav-icon > svg {
   @apply h-5 w-5;
 }

@@ -1,4 +1,5 @@
 import UserModel from '../models/userModel.js'
+import StoreModel from '../models/storeModel.js'
 import mongoose from 'mongoose'
 
 export const getUser = async (req, res) => {
@@ -20,8 +21,8 @@ export const getUser = async (req, res) => {
 }
 
 export const updateUser = async (req, res) => {
-  const data = req.body
-  console.log(data)
+  // const data = req.body
+  // console.log(data)
   try {
     const user = await UserModel.findOneAndUpdate({ email: req.body.email }, req.body, { new: true })
     if (user) {
@@ -29,6 +30,25 @@ export const updateUser = async (req, res) => {
       res.status(200).json({ data: otherDetails, message: 'User updated successfully!' })
     } else {
       res.status(404).json('Update user failed!')
+    }
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
+
+// Get my stores
+export const getAllUserStore = async (req, res) => {
+  const { id: ownerId } = req.query
+  try {
+    if (ownerId) {
+      const stores = await StoreModel.find({ ownerId })
+      return res.status(200).json({ data: stores, message: 'Get stores successfully' })
+      // if (stores.length) {
+      // } else {
+      //   return res.status(404)
+      // }
+    } else {
+      return res.status(404).json('User not found!')
     }
   } catch (error) {
     res.status(500).json(error)

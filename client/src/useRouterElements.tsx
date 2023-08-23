@@ -19,6 +19,9 @@ import AccountSetting from './pages/User/pages/AccountSetting/AccountSetting'
 import StoreLayout from './pages/Store/layout/StoreLayout'
 import CreateStore from './pages/Store/pages/CreateStore/CreateStore'
 import StoreDetail from './pages/Store/pages/StoreDetail/StoreDetail'
+import StoreSetting from './pages/Store/pages/StoreSetting/StoreSetting'
+import StoreManageProducts from './pages/Store/pages/StoreManageProducts/StoreManageProducts'
+import StoreManageOrders from './pages/Store/pages/StoreManageOrders/StoreManageOrders'
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
@@ -83,10 +86,22 @@ const useRouterElements = () => {
           path: path.shopDetail,
           element: (
             <MainLayout>
+              <StoreDetail />
+            </MainLayout>
+          )
+        },
+        {
+          path: path.shop,
+          element: (
+            <MainLayout>
               <StoreLayout />
             </MainLayout>
           ),
-          children: [{ path: path.shopDetail, element: <StoreDetail /> }]
+          children: [
+            { path: path.shopManageProducts, element: <StoreManageProducts /> },
+            { path: path.shopManageOrder, element: <StoreManageOrders /> },
+            { path: path.shopSetting, element: <StoreSetting /> }
+          ]
         }
       ]
     },
@@ -101,6 +116,10 @@ const useRouterElements = () => {
           <CategoryPage />
         </MainLayout>
       )
+    },
+    {
+      path: path.products,
+      element: <Navigate to={path.home} replace />
     },
     {
       path: path.productDetail,

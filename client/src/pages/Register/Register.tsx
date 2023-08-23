@@ -43,6 +43,7 @@ const Register = (props: Props) => {
   })
 
   const registerMutation = useMutation({
+    mutationKey: ['register'],
     mutationFn: (body: Omit<FormData, 'confirm_password'>) => authApi.registerAccount(body)
   })
 
@@ -57,7 +58,7 @@ const Register = (props: Props) => {
         },
         onError: (error) => {
           if (isAxiosError(error)) {
-            // setError('confirm_password', { message: error.response?.data as string, type: 'Server' })
+            setError('confirm_password', { message: error.response?.data as string, type: 'Server' })
           }
         }
       }
@@ -184,6 +185,7 @@ const Register = (props: Props) => {
             type='filled'
             isSubmitButton={true}
             customStyles='w-full text-white'
+            isLoading={registerMutation.isLoading}
             disabled={registerMutation.isLoading}
           />
 

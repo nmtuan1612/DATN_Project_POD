@@ -43,7 +43,7 @@ const Login = (props: Props) => {
     resolver: yupResolver(loginSchema)
   })
 
-  const loginMutation = useMutation({ mutationFn: (body: FormData) => authApi.login(body) })
+  const loginMutation = useMutation({ mutationKey: ['login'], mutationFn: (body: FormData) => authApi.login(body) })
 
   const onSubmit = handleSubmit((data) => {
     loginMutation.mutate(data, {
@@ -141,6 +141,7 @@ const Login = (props: Props) => {
             type='filled'
             handleClick={() => {}}
             customStyles='w-full text-white'
+            isLoading={loginMutation.isLoading}
             disabled={loginMutation.isLoading}
           />
 

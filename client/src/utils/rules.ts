@@ -12,15 +12,15 @@ const handleConfirmPasswordYup = (refString: string) => {
 export const schema = yup.object({
   email: yup
     .string()
-    .required('Email là bắt buộc')
-    .email('Email không đúng định dạng')
-    .min(5, 'Độ dài từ 5 - 160 ký tự')
-    .max(160, 'Độ dài từ 5 - 160 ký tự'),
+    .required('Email is required')
+    .email('Email is not in correct format')
+    .min(5, 'Length must be from 5 - 160 characters')
+    .max(160, 'Length must be from 5 - 160 characters'),
   password: yup
     .string()
-    .required('Password là bắt buộc')
-    .min(6, 'Độ dài từ 6 - 160 ký tự')
-    .max(160, 'Độ dài từ 6 - 160 ký tự'),
+    .required('Password is required')
+    .min(6, 'Length must have 6 - 160 characters')
+    .max(160, 'Length must have 6 - 160 characters'),
   confirm_password: handleConfirmPasswordYup('password'),
   // price_min: yup.string().test({
   //   name: 'price-not-allowed',
@@ -55,3 +55,21 @@ export const userSchema = yup.object({
 export type UserSchema = yup.InferType<typeof userSchema>
 
 export type Schema = yup.InferType<typeof schema>
+
+export const storeSchema = yup.object({
+  storeName: yup
+    .string()
+    .required('Store name is required')
+    .matches(/^[A-Za-z][A-Za-z0-9_ ]*$/, "Store name can't start with number or special character!")
+    .min(5, 'Min length is 5 characters!')
+    .max(160, 'Max length is 160 characters!'),
+  storeDescription: yup
+    .string()
+    .required('Description is required')
+    .min(20, 'Min length is 20 characters!')
+    .max(160, 'Max length is 160 characters!'),
+  logo: yup.string().max(1000, 'Max length is 1000 characters!'),
+  acceptTerm: yup.boolean().required('Accept our Terms of Service to create store!')
+})
+
+export type StoreSchema = yup.InferType<typeof storeSchema>
