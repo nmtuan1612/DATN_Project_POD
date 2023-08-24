@@ -133,6 +133,7 @@ const Register = (props: Props) => {
                 classNameInput='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pl-10 text-sm text-gray-700 focus:border-primary focus:outline-none focus:ring-0'
                 classNameEye='absolute right-3.5 h-5 w-5 cursor-pointer top-[12px] text-gray-700'
                 placeholder='Your password'
+                disabled={registerMutation.isLoading}
                 autoComplete='on'
               />
             </div>
@@ -165,6 +166,7 @@ const Register = (props: Props) => {
                 classNameInput='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pl-10 text-sm text-gray-700 focus:border-primary focus:outline-none focus:ring-0'
                 classNameEye='absolute right-3.5 h-5 w-5 cursor-pointer top-[12px] text-gray-700'
                 placeholder='Your confirm password'
+                disabled={registerMutation.isLoading}
                 autoComplete='on'
               />
             </div>

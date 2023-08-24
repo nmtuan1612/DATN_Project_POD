@@ -98,6 +98,7 @@ const Login = (props: Props) => {
                 {...register('email')}
                 className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pl-10 text-sm text-gray-700 focus:border-primary focus:outline-none focus:ring-0'
                 placeholder='Your email'
+                disabled={loginMutation.isLoading}
               />
             </div>
             <p className='mt-1 min-h-[1.25rem] text-sm text-red-600'>{errors.email?.message}</p>
@@ -126,6 +127,7 @@ const Login = (props: Props) => {
                 type='password'
                 id='email-address-icon'
                 register={register}
+                disabled={loginMutation.isLoading}
                 errorMessage={errors.password?.message}
                 classNameInput='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pl-10 text-sm text-gray-700 focus:border-primary focus:outline-none focus:ring-0'
                 classNameEye='absolute right-3.5 h-5 w-5 cursor-pointer top-[12px] text-gray-700'

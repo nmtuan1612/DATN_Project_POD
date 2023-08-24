@@ -1,27 +1,27 @@
-import React, { useContext } from 'react'
+import { Suspense, lazy, useContext } from 'react'
 import { Navigate, Outlet, createBrowserRouter } from 'react-router-dom'
-import Login from './pages/Login/Login'
-import ErrorPage from './pages/ErrorPage/ErrorPage'
-import AuthLayout from './layouts/AuthLayout/AuthLayout'
 import path from './config/path'
-import Register from './pages/Register/Register'
-import UserDetail from './pages/User/pages/UserDetail/UserDetail'
-import MainLayout from './layouts/MainLayout/MainLayout'
-import NotFound from './pages/NotFoundPage'
-import Home from './pages/Home/Home'
-import ProductDetail from './pages/ProductDetail/ProductDetail'
-import CategoryPage from './pages/CategoryPage/CategoryPage'
-import EditorPage from './pages/EditorPage/EditorPage'
-import UserLayout from './pages/User/layout/UserLayout'
-import ManageMyStores from './pages/User/pages/ManageMyStores/ManageMyStores'
 import { AppContext } from './context/app.context'
-import AccountSetting from './pages/User/pages/AccountSetting/AccountSetting'
+import AuthLayout from './layouts/AuthLayout/AuthLayout'
+import MainLayout from './layouts/MainLayout/MainLayout'
 import StoreLayout from './pages/Store/layout/StoreLayout'
-import CreateStore from './pages/Store/pages/CreateStore/CreateStore'
-import StoreDetail from './pages/Store/pages/StoreDetail/StoreDetail'
-import StoreSetting from './pages/Store/pages/StoreSetting/StoreSetting'
-import StoreManageProducts from './pages/Store/pages/StoreManageProducts/StoreManageProducts'
-import StoreManageOrders from './pages/Store/pages/StoreManageOrders/StoreManageOrders'
+import UserLayout from './pages/User/layout/UserLayout'
+const CreateStore = lazy(() => import('./pages/Store/pages/CreateStore/CreateStore'))
+const StoreDetail = lazy(() => import('./pages/Store/pages/StoreDetail/StoreDetail'))
+const StoreManageOrders = lazy(() => import('./pages/Store/pages/StoreManageOrders/StoreManageOrders'))
+const StoreManageProducts = lazy(() => import('./pages/Store/pages/StoreManageProducts/StoreManageProducts'))
+const StoreSetting = lazy(() => import('./pages/Store/pages/StoreSetting/StoreSetting'))
+const AccountSetting = lazy(() => import('./pages/User/pages/AccountSetting/AccountSetting'))
+const ManageMyStores = lazy(() => import('./pages/User/pages/ManageMyStores/ManageMyStores'))
+const UserDetail = lazy(() => import('./pages/User/pages/UserDetail/UserDetail'))
+const CategoryPage = lazy(() => import('./pages/CategoryPage/CategoryPage'))
+const EditorPage = lazy(() => import('./pages/EditorPage/EditorPage'))
+const Home = lazy(() => import('./pages/Home/Home'))
+const NotFound = lazy(() => import('./pages/NotFoundPage'))
+const ProductDetail = lazy(() => import('./pages/ProductDetail/ProductDetail'))
+const Register = lazy(() => import('./pages/Register/Register'))
+const Login = lazy(() => import('./pages/Login/Login'))
+const ErrorPage = lazy(() => import('./pages/ErrorPage/ErrorPage'))
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
@@ -43,7 +43,9 @@ const useRouterElements = () => {
           path: path.login,
           element: (
             <AuthLayout>
-              <Login />
+              <Suspense>
+                <Login />
+              </Suspense>
             </AuthLayout>
           )
         },
@@ -51,7 +53,9 @@ const useRouterElements = () => {
           path: path.register,
           element: (
             <AuthLayout>
-              <Register />
+              <Suspense>
+                <Register />
+              </Suspense>
             </AuthLayout>
           )
         }
@@ -69,16 +73,39 @@ const useRouterElements = () => {
             </MainLayout>
           ),
           children: [
-            { path: path.userDetail, element: <UserDetail /> },
-            { path: path.userStores, element: <ManageMyStores /> },
-            { path: path.userSetting, element: <AccountSetting /> }
+            {
+              path: path.userDetail,
+              element: (
+                <Suspense>
+                  <UserDetail />
+                </Suspense>
+              )
+            },
+            {
+              path: path.userStores,
+              element: (
+                <Suspense>
+                  <ManageMyStores />
+                </Suspense>
+              )
+            },
+            {
+              path: path.userSetting,
+              element: (
+                <Suspense>
+                  <AccountSetting />
+                </Suspense>
+              )
+            }
           ]
         },
         {
           path: path.createShop,
           element: (
             <MainLayout>
-              <CreateStore />
+              <Suspense>
+                <CreateStore />
+              </Suspense>
             </MainLayout>
           )
         },
@@ -86,7 +113,9 @@ const useRouterElements = () => {
           path: path.shopDetail,
           element: (
             <MainLayout>
-              <StoreDetail />
+              <Suspense>
+                <StoreDetail />
+              </Suspense>
             </MainLayout>
           )
         },
@@ -98,9 +127,30 @@ const useRouterElements = () => {
             </MainLayout>
           ),
           children: [
-            { path: path.shopManageProducts, element: <StoreManageProducts /> },
-            { path: path.shopManageOrder, element: <StoreManageOrders /> },
-            { path: path.shopSetting, element: <StoreSetting /> }
+            {
+              path: path.shopManageProducts,
+              element: (
+                <Suspense>
+                  <StoreManageProducts />
+                </Suspense>
+              )
+            },
+            {
+              path: path.shopManageOrder,
+              element: (
+                <Suspense>
+                  <StoreManageOrders />
+                </Suspense>
+              )
+            },
+            {
+              path: path.shopSetting,
+              element: (
+                <Suspense>
+                  <StoreSetting />
+                </Suspense>
+              )
+            }
           ]
         }
       ]
@@ -113,7 +163,9 @@ const useRouterElements = () => {
       path: path.categoryProduct,
       element: (
         <MainLayout>
-          <CategoryPage />
+          <Suspense>
+            <CategoryPage />
+          </Suspense>
         </MainLayout>
       )
     },
@@ -125,14 +177,18 @@ const useRouterElements = () => {
       path: path.productDetail,
       element: (
         <MainLayout>
-          <ProductDetail />
+          <Suspense>
+            <ProductDetail />
+          </Suspense>
         </MainLayout>
       )
     },
     {
       path: path.editProduct,
       element: (
-        <EditorPage />
+        <Suspense>
+          <EditorPage />
+        </Suspense>
         // <MainLayout>
         // </MainLayout>
       )
@@ -142,16 +198,24 @@ const useRouterElements = () => {
       index: true,
       element: (
         <MainLayout>
-          <Home />
+          <Suspense>
+            <Home />
+          </Suspense>
         </MainLayout>
       ),
-      errorElement: <ErrorPage />
+      errorElement: (
+        <Suspense>
+          <ErrorPage />
+        </Suspense>
+      )
     },
     {
       path: '*',
       element: (
         <MainLayout>
-          <NotFound />
+          <Suspense>
+            <NotFound />
+          </Suspense>
         </MainLayout>
       )
     }

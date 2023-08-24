@@ -6,6 +6,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google'
 import { AppProvider } from './context/app.context'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import ErrorBoundary from './components/ErrorBoundary'
 
 const queryClient = new QueryClient()
 
@@ -14,7 +15,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
         <AppProvider>
-          <App />
+          <ErrorBoundary>
+            <App />
+          </ErrorBoundary>
         </AppProvider>
         <ReactQueryDevtools initialIsOpen={true} />
       </QueryClientProvider>
