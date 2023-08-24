@@ -16,7 +16,8 @@ const ManageMyStores = lazy(() => import('./pages/User/pages/ManageMyStores/Mana
 const UserDetail = lazy(() => import('./pages/User/pages/UserDetail/UserDetail'))
 const CategoryPage = lazy(() => import('./pages/CategoryPage/CategoryPage'))
 const EditorPage = lazy(() => import('./pages/EditorPage/EditorPage'))
-const Home = lazy(() => import('./pages/Home/Home'))
+// const Home = lazy(() => import('./pages/Home/Home'))
+import Home from './pages/Home/Home'
 const NotFound = lazy(() => import('./pages/NotFoundPage'))
 const ProductDetail = lazy(() => import('./pages/ProductDetail/ProductDetail'))
 const Register = lazy(() => import('./pages/Register/Register'))
@@ -198,9 +199,9 @@ const useRouterElements = () => {
       index: true,
       element: (
         <MainLayout>
-          <Suspense>
-            <Home />
-          </Suspense>
+          {/* <Suspense> */}
+          <Home />
+          {/* </Suspense> */}
         </MainLayout>
       ),
       errorElement: (
