@@ -23,7 +23,7 @@ const StoreOrderDetail = (props: Props) => {
 
   const productionCost = useMemo(
     () =>
-      order && order?.items.length
+      order && order?.items?.length
         ? order.items
             .reduce((total: number, product: OrderItem) => {
               return (total += product.variant.productionCost * product.quantity)

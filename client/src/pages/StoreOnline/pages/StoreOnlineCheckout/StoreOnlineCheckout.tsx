@@ -374,7 +374,7 @@ const StoreOnlineCheckout = (props: Props) => {
             ) : (
               <>
                 <div className='mt-6 flex flex-col gap-5'>
-                  {productsList.length &&
+                  {productsList?.length &&
                     productsList.map((product: CartProductResponse) => {
                       // const [id, variantId] = prod.variantId.split('-')
                       // const product = productsList.find((item: Product) => item._id === id)

@@ -38,7 +38,7 @@ const FeaturedPage = (props: Props) => {
             <SortFilters title={hiddenTag} />
             <div className='mt-6 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4'>
               {productsData?.data?.data ? (
-                productsData?.data?.data.length ? (
+                productsData?.data?.data?.length ? (
                   productsData?.data?.data.map((product: any, idx: number) => (
                     <div className='col-span-1' key={product._id + idx}>
                       <ProductCard productData={product} />

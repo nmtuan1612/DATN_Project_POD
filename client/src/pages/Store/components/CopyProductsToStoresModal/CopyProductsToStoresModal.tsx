@@ -28,7 +28,7 @@ const CopyProductsToStoresModal = ({ visible, listIds, onCancel, products }: Pro
   }
 
   const handleCopyToStores = async () => {
-    if (selectedStores.length) {
+    if (selectedStores?.length) {
       const selectedProducts = products.filter((product) => listIds.includes(product._id))
       console.log(selectedProducts)
 
@@ -47,10 +47,10 @@ const CopyProductsToStoresModal = ({ visible, listIds, onCancel, products }: Pro
   return (
     <Modal
       visible={visible}
-      title={`Copy ${listIds.length} products to ...`}
+      title={`Copy ${listIds?.length} products to ...`}
       onOk={handleCopyToStores}
       onCancel={onCancel}
-      canOk={selectedStores.length > 0}
+      canOk={selectedStores?.length > 0}
     >
       <div className=''>
         <p className='flex items-center gap-2 text-sm italic text-gray-500'>

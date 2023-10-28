@@ -82,7 +82,7 @@ const StoreOnlineCart = (props: Props) => {
       <div className='flex items-center gap-4'>
         <h2 className='text-2xl font-semibold text-gray-700'>Products in your cart</h2>
         <div className='h-5 border-r-2 border-gray-700' />
-        <span className='font-medium'>{products.length} items</span>
+        <span className='font-medium'>{products?.length} items</span>
       </div>
       {!products?.length ? (
         <ProductsListEmpty

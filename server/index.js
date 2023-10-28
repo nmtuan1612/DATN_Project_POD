@@ -42,7 +42,7 @@ app.use('/api/v1/product', ProductRouter)
 app.use('/api/v1/conversation', ConversationRouter)
 
 app.get('/', (req, res) => {
-  res.status(200).json({ message: 'Hello from CreoPrint' })
+  res.status(200).json({ message: 'Hello from CreoPrint' + process.env.OPENAI_API_KEY })
 })
 
 const connectServerToDB = async () => {
