@@ -14,7 +14,7 @@ import CategoryRouter from './routes/CategoryRoutes.js'
 import ConversationRouter from './routes/ConversationRoutes.js'
 import UploadRouter from './routes/UploadRoute.js'
 import ProductRouter from './routes/ProductRoutes.js'
-import MessageModel from './MongoDB/Models/messageModel.js'
+import MessageModel from './MongoDB/models/messageModel.js'
 
 dotenv.config()
 

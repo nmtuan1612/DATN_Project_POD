@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
-import conversationModel from '../Models/conversationModel.js'
-import MessageModel from '../Models/messageModel.js'
+import conversationModel from '../models/conversationModel.js'
+import MessageModel from '../models/messageModel.js'
 
 export const createConversation = async (req, res) => {
   const { customer: customerId, store: storeId } = req.body
