@@ -34,10 +34,10 @@ export const AppUrls = {
 
 const config = {
   development: {
-    // frontendUrl: 'http://localhost:5173',
-    // backendUrl: 'http://localhost:8080/api/v1'
-    frontendUrl: 'https://creoprint.netlify.app',
-    backendUrl: 'https://pod-creoprint.onrender.com/api/v1'
+    frontendUrl: 'http://localhost:5173',
+    backendUrl: 'http://localhost:8080/api/v1'
+    // frontendUrl: 'https://creoprint.netlify.app',
+    // backendUrl: 'https://pod-creoprint.onrender.com/api/v1'
   },
   production: {
     backendUrl: 'https://pod-creoprint.onrender.com/api/v1'

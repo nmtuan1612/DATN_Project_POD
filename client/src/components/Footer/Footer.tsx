@@ -15,8 +15,8 @@ const Footer = ({}: Props) => {
   const { currentStore } = useContext(AppContext)
 
   return (
-    <div className='container my-6'>
-      <div className='flex justify-between border-t py-10'>
+    <div className='container my-4'>
+      <div className='flex flex-col justify-between border-t py-10 md:flex-row'>
         {/* col 1 */}
         <div className=''>
           <Link to='/' className='logo'>
@@ -84,7 +84,7 @@ const Footer = ({}: Props) => {
           </div>
         </div>
       </div>
-      <p className='py-3 text-center italic text-gray-500'>
+      <p className='pt-3 text-center italic text-gray-500'>
         Powered by{' '}
         <Link to={path.home} className='font-semibold text-primary'>
           @CreoPrint

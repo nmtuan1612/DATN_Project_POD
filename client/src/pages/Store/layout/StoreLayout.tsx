@@ -36,24 +36,27 @@ const StoreLayout = (props: Props) => {
 
   return (
     <AnimatePresence>
-      <motion.section {...fadeAnimation} className='container h-full py-10 text-gray-600'>
-        <div className='grid h-full grid-cols-1 gap-6 md:grid-cols-12 lg:grid-cols-10'>
-          <motion.div {...slideAnimation('left')} className='border-r md:col-span-3 lg:col-span-2'>
-            <StoreSideNav />
-          </motion.div>
-          <div className='flex flex-col pb-10 md:col-span-9 lg:col-span-8'>
-            {!matchOrderDetail && !matchProductDetail ? (
-              <motion.div {...slideAnimation('down')} className='mb-8'>
-                <StoreTopNav />
-              </motion.div>
-            ) : (
-              <></>
-            )}
-            <div className='flex-1 overflow-y-scroll'>
-              <Outlet />
-            </div>
+      <motion.section
+        {...fadeAnimation}
+        className='container grid h-full flex-1 grid-cols-1 gap-6 py-10 text-gray-600 md:grid-cols-12 lg:grid-cols-10'
+      >
+        {/* <div className=''> */}
+        <motion.div {...slideAnimation('left')} className='border-r md:col-span-3 lg:col-span-2'>
+          <StoreSideNav />
+        </motion.div>
+        <div className='flex flex-col md:col-span-9 lg:col-span-8'>
+          {!matchOrderDetail && !matchProductDetail ? (
+            <motion.div {...slideAnimation('down')} className='mb-8'>
+              <StoreTopNav />
+            </motion.div>
+          ) : (
+            <></>
+          )}
+          <div className='flex-1 overflow-y-scroll'>
+            <Outlet />
           </div>
         </div>
+        {/* </div> */}
       </motion.section>
     </AnimatePresence>
   )

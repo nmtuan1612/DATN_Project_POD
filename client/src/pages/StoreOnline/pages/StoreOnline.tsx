@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import storeApi from 'src/apis/store.api'
+import InputSearch from 'src/components/InputSearch/InputSearch'
 import ProductsListEmpty from 'src/components/ProductsListEmpty/ProductsListEmpty'
 import SortFilters from 'src/components/SortFilters/SortFilters'
 import useQueryConfig from 'src/hooks/useQueryConfig'
@@ -16,6 +17,7 @@ const StoreDetail = (props: Props) => {
   queryConfig.status = 'published'
 
   const { shopId } = useParams()
+  const { pathname } = useLocation()
 
   const {
     data: productsData,
@@ -29,9 +31,24 @@ const StoreDetail = (props: Props) => {
 
   const products: Product[] = productsData?.data?.data
 
+  const { searchKey } = queryConfig
+
+  const getTitle = () => {
+    if (pathname) {
+      return searchKey
+        ? `Search result for: '${searchKey}'`
+        : queryConfig.categoryId?.replaceAll('-', ' ') || 'All products'
+    }
+    return ''
+  }
+
   return (
-    <div>
-      <SortFilters title={queryConfig.categoryId?.replaceAll('-', ' ') || 'All products'} />
+    <>
+      <InputSearch placeholder='Search product by name...' pathname={pathname} queryConfig={queryConfig} />
+      <div className='mt-6'>
+        {/* <SortFilters title={queryConfig.categoryId?.replaceAll('-', ' ') || 'All products'} /> */}
+        <SortFilters title={getTitle()} />
+      </div>
       <div className='mt-6 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4'>
         {isLoading ? (
           Array(12)
@@ -53,7 +70,7 @@ const StoreDetail = (props: Props) => {
           </div>
         )}
       </div>
-    </div>
+    </>
   )
 }
 

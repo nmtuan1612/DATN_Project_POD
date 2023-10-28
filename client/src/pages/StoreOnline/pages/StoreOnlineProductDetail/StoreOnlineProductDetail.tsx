@@ -26,7 +26,7 @@ import { toast } from 'react-toastify'
 type Props = {}
 
 const StoreOnlineProductDetail = (props: Props) => {
-  const { currentStore } = useContext(AppContext)
+  const { currentStore, profile } = useContext(AppContext)
   const [relatedProducts, setRelatedProducts] = useState<SampleProduct[]>(Array(10).fill(sampleProductMockData))
 
   const [showProviderDetail, setShowProviderDetail] = useState(false)
@@ -198,81 +198,85 @@ const StoreOnlineProductDetail = (props: Props) => {
                   </div>
                 </div>
 
-                {/* Quantity */}
-                <div className='flex items-center gap-6'>
-                  <span className='min-w-[70px] font-medium text-gray-600'>Quantity</span>
-                  <div className='flex items-center gap-4'>
-                    <button
-                      disabled={quantity === 1}
-                      className='rounded-sm border-0 bg-gray-100 p-1 text-gray-700 outline-0 hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:text-gray-700'
-                      onClick={() => setQuantity((prev) => prev - 1)}
-                    >
-                      <svg
-                        xmlns='http://www.w3.org/2000/svg'
-                        fill='none'
-                        viewBox='0 0 24 24'
-                        strokeWidth={1.5}
-                        stroke='currentColor'
-                        className='h-5 w-5'
-                      >
-                        <path strokeLinecap='round' strokeLinejoin='round' d='M18 12H6' />
-                      </svg>
-                    </button>
-                    <span>{quantity}</span>
-                    <button
-                      className='rounded-sm border-0 bg-gray-100 p-1 text-gray-700 outline-0 hover:border-primary hover:text-primary'
-                      onClick={() => setQuantity((prev) => prev + 1)}
-                    >
-                      <svg
-                        xmlns='http://www.w3.org/2000/svg'
-                        fill='none'
-                        viewBox='0 0 24 24'
-                        strokeWidth={1.5}
-                        stroke='currentColor'
-                        className='h-5 w-5'
-                      >
-                        <path strokeLinecap='round' strokeLinejoin='round' d='M12 6v12m6-6H6' />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
+                {profile?._id !== product.storeId?.ownerId && (
+                  <>
+                    {/* Quantity */}
+                    <div className='flex items-center gap-6'>
+                      <span className='min-w-[70px] font-medium text-gray-600'>Quantity</span>
+                      <div className='flex items-center gap-4'>
+                        <button
+                          disabled={quantity === 1}
+                          className='rounded-sm border-0 bg-gray-100 p-1 text-gray-700 outline-0 hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:text-gray-700'
+                          onClick={() => setQuantity((prev) => prev - 1)}
+                        >
+                          <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            fill='none'
+                            viewBox='0 0 24 24'
+                            strokeWidth={1.5}
+                            stroke='currentColor'
+                            className='h-5 w-5'
+                          >
+                            <path strokeLinecap='round' strokeLinejoin='round' d='M18 12H6' />
+                          </svg>
+                        </button>
+                        <span>{quantity}</span>
+                        <button
+                          className='rounded-sm border-0 bg-gray-100 p-1 text-gray-700 outline-0 hover:border-primary hover:text-primary'
+                          onClick={() => setQuantity((prev) => prev + 1)}
+                        >
+                          <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            fill='none'
+                            viewBox='0 0 24 24'
+                            strokeWidth={1.5}
+                            stroke='currentColor'
+                            className='h-5 w-5'
+                          >
+                            <path strokeLinecap='round' strokeLinejoin='round' d='M12 6v12m6-6H6' />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
 
-                {/* Buttons */}
-                <div className='flex items-center gap-6'>
-                  <span
-                    className='text-md flex cursor-pointer items-center gap-2 font-medium text-primary hover:text-purple-300'
-                    onClick={handleViewAbout}
-                  >
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      strokeWidth={2}
-                      stroke='currentColor'
-                      className='h-5 w-5'
-                    >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        d='M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z'
+                    {/* Buttons */}
+                    <div className='flex items-center gap-6'>
+                      <span
+                        className='text-md flex cursor-pointer items-center gap-2 font-medium text-primary hover:text-purple-300'
+                        onClick={handleViewAbout}
+                      >
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          fill='none'
+                          viewBox='0 0 24 24'
+                          strokeWidth={2}
+                          stroke='currentColor'
+                          className='h-5 w-5'
+                        >
+                          <path
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            d='M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z'
+                          />
+                        </svg>
+                        Add to wish list
+                      </span>
+                      <CustomButton
+                        title={
+                          <>
+                            <img src={addToCartIcon} alt='ad to cart' className='mr-2' />
+                            Add to cart
+                          </>
+                        }
+                        type='filled'
+                        handleClick={
+                          handleAddToCart
+                          // () => navigate(AppUrls.customProduct(generateNameId({ name: product.name, id: product._id })))
+                        }
                       />
-                    </svg>
-                    Add to wish list
-                  </span>
-                  <CustomButton
-                    title={
-                      <>
-                        <img src={addToCartIcon} alt='ad to cart' className='mr-2' />
-                        Add to cart
-                      </>
-                    }
-                    type='filled'
-                    handleClick={
-                      handleAddToCart
-                      // () => navigate(AppUrls.customProduct(generateNameId({ name: product.name, id: product._id })))
-                    }
-                  />
-                </div>
+                    </div>
+                  </>
+                )}
 
                 <div className='mt-10'>
                   <p className='text-sm capitalize italic tracking-wide text-gray-400'>

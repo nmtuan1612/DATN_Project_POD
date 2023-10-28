@@ -31,7 +31,7 @@ export interface ProductVariant {
 }
 export interface Product {
   _id: string
-  storeIds: string[]
+  storeId: string | any
   modelMetaData: modelMetaData
   categoryIds: string[]
   name: string

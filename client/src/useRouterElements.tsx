@@ -168,47 +168,7 @@ const useRouterElements = () => {
             </MainLayout>
           )
         },
-        // Shop online
-        {
-          path: path.shopOnlineDetail,
-          element: (
-            <Suspense>
-              <OnlineStoreLayout>
-                <StoreOnline />
-              </OnlineStoreLayout>
-            </Suspense>
-          )
-        },
-        {
-          path: path.shopOnlineProductDetail,
-          element: (
-            <Suspense>
-              <OnlineStoreLayout>
-                <StoreOnlineProductDetail />
-              </OnlineStoreLayout>
-            </Suspense>
-          )
-        },
-        {
-          path: path.shopOnlineCart,
-          element: (
-            <Suspense>
-              <OnlineStoreLayout>
-                <StoreOnlineCart />
-              </OnlineStoreLayout>
-            </Suspense>
-          )
-        },
-        {
-          path: path.shopOnlineCheckout,
-          element: (
-            <Suspense>
-              <OnlineStoreLayout>
-                <StoreOnlineCheckout />
-              </OnlineStoreLayout>
-            </Suspense>
-          )
-        },
+
         // Shop manage
         {
           path: path.shop,
@@ -326,6 +286,47 @@ const useRouterElements = () => {
         </Suspense>
         // <MainLayout>
         // </MainLayout>
+      )
+    },
+    // Shop online
+    {
+      path: path.shopOnlineDetail,
+      element: (
+        <Suspense>
+          <OnlineStoreLayout>
+            <StoreOnline />
+          </OnlineStoreLayout>
+        </Suspense>
+      )
+    },
+    {
+      path: path.shopOnlineProductDetail,
+      element: (
+        <Suspense>
+          <OnlineStoreLayout>
+            <StoreOnlineProductDetail />
+          </OnlineStoreLayout>
+        </Suspense>
+      )
+    },
+    {
+      path: path.shopOnlineCart,
+      element: (
+        <Suspense>
+          <OnlineStoreLayout>
+            <StoreOnlineCart />
+          </OnlineStoreLayout>
+        </Suspense>
+      )
+    },
+    {
+      path: path.shopOnlineCheckout,
+      element: (
+        <Suspense>
+          <OnlineStoreLayout>
+            <StoreOnlineCheckout />
+          </OnlineStoreLayout>
+        </Suspense>
       )
     },
     {

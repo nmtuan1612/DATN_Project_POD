@@ -21,18 +21,20 @@ const MainLayout = ({ children }: Props) => {
       {/* <div className='sticky top-0 z-50'> */}
       <Header />
       {/* </div> */}
-      <div className='h-full pt-20'>
-        {!pathname.includes('/shop/') && !pathname.includes('/user/') && (
-          <div className='my-t container md:mt-6'>
-            <InputSearch
-              placeholder='Search sample product...'
-              pathname={path.productSearchResult}
-              queryConfig={queryConfig}
-            />
-          </div>
-        )}
-        {children}
-        {/* <Footer /> */}
+      <div className='flex min-h-full flex-col pt-20'>
+        <div className='flex flex-1 flex-col'>
+          {!pathname.includes('/shop/') && !pathname.includes('/user/') && (
+            <div className='container mt-4 md:mt-6'>
+              <InputSearch
+                placeholder='Search sample product...'
+                pathname={path.productSearchResult}
+                queryConfig={queryConfig}
+              />
+            </div>
+          )}
+          {children}
+        </div>
+        <Footer />
       </div>
       {/* <CanvasModel /> */}
       {!pathname.includes('/shop/') && <UserChats />}
