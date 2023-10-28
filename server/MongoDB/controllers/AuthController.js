@@ -16,13 +16,11 @@ export const login = async (req, res) => {
       const profile = verificationResponse?.payload
 
       const oldUser = await UserModel.findOne({ email: profile.email })
-      const { password, ...otherDetails } = oldUser._doc
 
       if (!oldUser) {
-        return res.status(400).json({
-          message: 'You are not registered. Please sign up'
-        })
+        return res.status(400).json('You are not registered. Please sign up')
       }
+      const { password, ...otherDetails } = oldUser._doc
       res.status(200).json({
         message: 'Login was successful',
         user: otherDetails,

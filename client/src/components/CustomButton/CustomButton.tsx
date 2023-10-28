@@ -4,11 +4,14 @@ import { useSnapshot } from 'valtio'
 import state from '../../store'
 import { getContrastingColor } from '../../config/helpers'
 import { primaryColor } from '../../config/constants'
+import classNames from 'classnames'
 
-type ButtonType = 'filled' | 'outline'
+type ButtonType = 'filled' | 'outline' | 'danger' | 'icon'
+export type ButtonSize = 'small' | 'medium' | 'large'
 
 type Props = {
   type: ButtonType
+  size?: ButtonSize
   title: string | ReactNode
   disabled?: boolean
   customStyles?: string
@@ -17,32 +20,54 @@ type Props = {
   handleClick?: () => any
 }
 
-const CustomButton = ({ type, title, disabled, customStyles, isLoading, isSubmitButton, handleClick }: Props) => {
+const CustomButton = ({
+  type,
+  size = 'medium',
+  title,
+  disabled,
+  customStyles,
+  isLoading,
+  isSubmitButton,
+  handleClick
+}: Props) => {
   const snap = useSnapshot(state)
 
   const generateStyle = (type: ButtonType) => {
     if (type === 'filled') {
       return {
-        // backgroundColor: snap.color,
         // color: getContrastingColor(snap.color)
         backgroundColor: primaryColor,
         color: '#fff',
-        // borderWidth: '1px',
         borderColor: primaryColor
       }
     } else if (type === 'outline') {
       return {
-        // borderWidth: '1px',
         borderColor: '#c5c7c8'
-        // borderColor: snap.color,
-        // color: snap.color
+        // backgroundColor: '#f3f4f6'
+      }
+    } else if (type === 'danger') {
+      return {
+        color: '#fff',
+        borderColor: '#ff4d4f',
+        backgroundColor: '#ff4d4f'
+      }
+    } else if (type === 'icon') {
+      return {
+        border: 'none'
       }
     }
   }
 
   return (
     <button
-      className={`flex items-center justify-center gap-1 rounded-lg border-[1px] px-4 py-2 text-sm font-medium hover:opacity-80 focus:outline-none disabled:cursor-not-allowed disabled:opacity-80 md:px-5 md:py-2.5 ${customStyles}`}
+      className={classNames(
+        `flex items-center justify-center gap-1 rounded-lg border-[1px] font-medium hover:opacity-80 focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 ${customStyles}`,
+        {
+          'px-2 py-1 text-sm md:px-2 md:py-1': size === 'small',
+          'px-4 py-2 text-sm md:px-5 md:py-2.5': size === 'medium',
+          'px-6 py-3 text-base md:px-6 md:py-3': size === 'large'
+        }
+      )}
       style={generateStyle(type)}
       disabled={disabled}
       onClick={handleClick}

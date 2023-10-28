@@ -70,9 +70,12 @@ const CreateStore = (props: Props) => {
         },
         {
           onSuccess: (data) => {
-            toast.success(data.data?.message)
+            toast.success(data.data?.message, { autoClose: 1000 })
             const link = document.createElement('a')
-            link.setAttribute('href', `${config.development.frontendUrl}${AppUrls.shopDetail(data.data.data._id)}`)
+            link.setAttribute(
+              'href',
+              `${config.development.frontendUrl}${AppUrls.shopOnlineDetail(data.data.data._id)}`
+            )
             link.setAttribute('target', '_blank')
             link.click()
             setCurrentStore(data.data?.data)
@@ -99,7 +102,7 @@ const CreateStore = (props: Props) => {
 
   return (
     <AnimatePresence>
-      <motion.div {...fadeAnimation} className='container py-4 md:py-6'>
+      <motion.div {...fadeAnimation} className='container overflow-y-scroll py-4 md:py-6'>
         <motion.div {...slideAnimation('down')}>
           <BreadCrumbs />
           <h2 className='mt-6 text-2xl font-semibold text-gray-900'>Create CreoPrint store</h2>
@@ -238,7 +241,11 @@ const CreateStore = (props: Props) => {
                   <div className='mb-2 flex items-center gap-4'>
                     <InputFile onChange={handleChangeFile} />
                     <div className='my-2 h-[106px] w-[106px] border-2 '>
-                      <img src={previewImage || getLogoUrl(logo)} alt='' className='h-full w-full object-cover' />
+                      <img
+                        src={previewImage || getLogoUrl(logo)}
+                        alt='store-avt'
+                        className='h-full w-full object-cover'
+                      />
                     </div>
                   </div>
                   <label htmlFor='store-desc' className='mb-2 block font-medium text-gray-700'>

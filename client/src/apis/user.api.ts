@@ -1,3 +1,4 @@
+import { AppUrls } from 'src/config/config'
 import path from 'src/config/path'
 import http from 'src/utils/http'
 
@@ -9,6 +10,12 @@ const userApi = {
   },
   updateAccount(body: BodyUpdateAccount) {
     return http.put(path.user, body)
+  },
+  getUserOrders(params: any) {
+    return http.get(path.userOrders, { params })
+  },
+  getUserOrderDetail(orderId: string) {
+    return http.get(AppUrls.userOrderDetail(orderId))
   }
 }
 

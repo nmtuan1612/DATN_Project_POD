@@ -1,0 +1,57 @@
+// @import "/src/App.scss";
+.message-container {
+  &::-webkit-scrollbar {
+    // display: none;
+  }
+  // height: calc(100% - 32px - 44px);
+
+  .message-content {
+    width: fit-content;
+    height: auto;
+    // max-width: 120px;
+    display: flex;
+    align-items: center;
+    background-color: #43a047;
+    border-radius: 6px;
+    color: white;
+    // margin: 0 5px;
+    padding: 6px 10px;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    p {
+      font-size: 14px;
+      line-height: 18px;
+    }
+  }
+
+  #you {
+    justify-content: flex-end;
+    .message-wrapper {
+      align-items: flex-end;
+    }
+    .message-content {
+      justify-content: flex-end;
+    }
+
+    .message-meta {
+      justify-content: flex-end;
+      padding-right: 2px;
+    }
+  }
+
+  #other {
+    justify-content: flex-start;
+    .message-wrapper {
+      align-items: flex-start;
+    }
+    .message-content {
+      justify-content: flex-start;
+      background-color: cornflowerblue;
+    }
+
+    .message-meta {
+      justify-content: flex-start;
+      padding-left: 2px;
+    }
+  }
+}

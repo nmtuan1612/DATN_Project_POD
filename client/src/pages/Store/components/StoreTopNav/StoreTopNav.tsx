@@ -22,7 +22,7 @@ const StoreTopNav = (props: Props) => {
 
   return (
     <div className='flex items-center justify-between'>
-      <h2 className='tab__title'>{tabTitle}</h2>
+      <h2 className='tab__title text-gray-600'>{tabTitle}</h2>
       <CustomButton
         type='filled'
         title={
@@ -48,7 +48,7 @@ const StoreTopNav = (props: Props) => {
           const link = document.createElement('a')
           link.setAttribute(
             'href',
-            `${config.development.frontendUrl}${AppUrls.shopDetail(currentStore?._id as string)}`
+            `${config.development.frontendUrl}${AppUrls.shopOnlineDetail(currentStore?._id as string)}`
           )
           link.setAttribute('target', '_blank')
           link.click()

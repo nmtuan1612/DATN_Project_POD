@@ -25,7 +25,7 @@ const Login = (props: Props) => {
   const { setIsAuthenticated, setProfile } = useContext(AppContext)
   const navigate = useNavigate()
 
-  const { handleGoogle } = useGoogle({ url: `${config.development.backendUrl}${path.login}` })
+  const { handleGoogle, error } = useGoogle({ url: `${config.development.backendUrl}${path.login}` })
 
   const loginSuccess = (response: CredentialResponse) => {
     handleGoogle(response)
@@ -33,6 +33,12 @@ const Login = (props: Props) => {
   const errorMessage = () => {
     toast.error('Authenticate failed')
   }
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error, { position: 'top-center', autoClose: 1000 })
+    }
+  }, [error])
 
   const {
     register,
@@ -125,7 +131,7 @@ const Login = (props: Props) => {
               <Input
                 name='password'
                 type='password'
-                id='email-address-icon'
+                id='password-icon'
                 register={register}
                 disabled={loginMutation.isLoading}
                 errorMessage={errors.password?.message}

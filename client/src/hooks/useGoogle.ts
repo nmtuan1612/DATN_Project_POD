@@ -3,6 +3,7 @@ import { type CredentialResponse } from '@react-oauth/google'
 import { setAccessTokenToLS, setProfileToLS } from 'src/utils/auth'
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from 'src/context/app.context'
+import { toast } from 'react-toastify'
 
 type Props = {
   url: string
@@ -46,6 +47,7 @@ const useGoogle = ({ url }: Props) => {
         throw new Error(data?.message || data)
       })
       .catch((error) => {
+        toast.error(error)
         setError(error?.message)
       })
   }

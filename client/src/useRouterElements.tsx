@@ -6,18 +6,36 @@ import AuthLayout from './layouts/AuthLayout/AuthLayout'
 import MainLayout from './layouts/MainLayout/MainLayout'
 import StoreLayout from './pages/Store/layout/StoreLayout'
 import UserLayout from './pages/User/layout/UserLayout'
+import Home from './pages/Home/Home'
+import AddSample from './pages/AddSample/AddSample'
+import FeaturedPage from './pages/FeaturedPage/FeaturedPage'
+import OnlineStoreLayout from './pages/StoreOnline/layout/OnlineStoreLayout/OnlineStoreLayout'
+import UserCartWrapper from './components/UserCartWrapper/UserCartWrapper'
+
 const CreateStore = lazy(() => import('./pages/Store/pages/CreateStore/CreateStore'))
-const StoreDetail = lazy(() => import('./pages/Store/pages/StoreDetail/StoreDetail'))
+const StoreOnline = lazy(() => import('./pages/StoreOnline/pages/StoreOnline'))
+const StoreOnlineProductDetail = lazy(
+  () => import('./pages/StoreOnline/pages/StoreOnlineProductDetail/StoreOnlineProductDetail')
+)
+const StoreOnlineCheckout = lazy(() => import('./pages/StoreOnline/pages/StoreOnlineCheckout/StoreOnlineCheckout'))
+const StoreOnlineCart = lazy(() => import('./pages/StoreOnline/pages/StoreOnlineCart/StoreOnlineCart'))
 const StoreManageOrders = lazy(() => import('./pages/Store/pages/StoreManageOrders/StoreManageOrders'))
+const StoreOrderDetail = lazy(() => import('./pages/Store/pages/StoreOrderDetail/StoreOrderDetail'))
 const StoreManageProducts = lazy(() => import('./pages/Store/pages/StoreManageProducts/StoreManageProducts'))
+const StoreProductDetail = lazy(() => import('./pages/Store/pages/StoreProductDetail/StoreProductDetail'))
+const StoreManageChat = lazy(() => import('./pages/Store/pages/StoreManageChat/StoreManageChat'))
 const StoreSetting = lazy(() => import('./pages/Store/pages/StoreSetting/StoreSetting'))
+
 const AccountSetting = lazy(() => import('./pages/User/pages/AccountSetting/AccountSetting'))
 const ManageMyStores = lazy(() => import('./pages/User/pages/ManageMyStores/ManageMyStores'))
 const UserDetail = lazy(() => import('./pages/User/pages/UserDetail/UserDetail'))
 const CategoryPage = lazy(() => import('./pages/CategoryPage/CategoryPage'))
+const SearchResultPage = lazy(() => import('./pages/SearchResultPage/SearchResultPage'))
 const EditorPage = lazy(() => import('./pages/EditorPage/EditorPage'))
+const ManageMyOrders = lazy(() => import('./pages/User/pages/ManageMyOrders/ManageMyOrders'))
+const UserOrderDetail = lazy(() => import('./pages/User/pages/UserOrderDetail/UserOrderDetail'))
+
 // const Home = lazy(() => import('./pages/Home/Home'))
-import Home from './pages/Home/Home'
 const NotFound = lazy(() => import('./pages/NotFoundPage'))
 const ProductDetail = lazy(() => import('./pages/ProductDetail/ProductDetail'))
 const Register = lazy(() => import('./pages/Register/Register'))
@@ -67,6 +85,30 @@ const useRouterElements = () => {
       element: <ProtectedRoute />,
       children: [
         {
+          path: path.userCart,
+          element: (
+            <MainLayout>
+              <UserCartWrapper>
+                <Suspense>
+                  <StoreOnlineCart />
+                </Suspense>
+              </UserCartWrapper>
+            </MainLayout>
+          )
+        },
+        {
+          path: path.userCheckout,
+          element: (
+            <MainLayout>
+              <UserCartWrapper>
+                <Suspense>
+                  <StoreOnlineCheckout />
+                </Suspense>
+              </UserCartWrapper>
+            </MainLayout>
+          )
+        },
+        {
           path: path.user,
           element: (
             <MainLayout>
@@ -97,6 +139,22 @@ const useRouterElements = () => {
                   <AccountSetting />
                 </Suspense>
               )
+            },
+            {
+              path: path.userOrders,
+              element: (
+                <Suspense>
+                  <ManageMyOrders />
+                </Suspense>
+              )
+            },
+            {
+              path: path.userOrderDetail,
+              element: (
+                <Suspense>
+                  <UserOrderDetail />
+                </Suspense>
+              )
             }
           ]
         },
@@ -110,16 +168,48 @@ const useRouterElements = () => {
             </MainLayout>
           )
         },
+        // Shop online
         {
-          path: path.shopDetail,
+          path: path.shopOnlineDetail,
           element: (
-            <MainLayout>
-              <Suspense>
-                <StoreDetail />
-              </Suspense>
-            </MainLayout>
+            <Suspense>
+              <OnlineStoreLayout>
+                <StoreOnline />
+              </OnlineStoreLayout>
+            </Suspense>
           )
         },
+        {
+          path: path.shopOnlineProductDetail,
+          element: (
+            <Suspense>
+              <OnlineStoreLayout>
+                <StoreOnlineProductDetail />
+              </OnlineStoreLayout>
+            </Suspense>
+          )
+        },
+        {
+          path: path.shopOnlineCart,
+          element: (
+            <Suspense>
+              <OnlineStoreLayout>
+                <StoreOnlineCart />
+              </OnlineStoreLayout>
+            </Suspense>
+          )
+        },
+        {
+          path: path.shopOnlineCheckout,
+          element: (
+            <Suspense>
+              <OnlineStoreLayout>
+                <StoreOnlineCheckout />
+              </OnlineStoreLayout>
+            </Suspense>
+          )
+        },
+        // Shop manage
         {
           path: path.shop,
           element: (
@@ -151,6 +241,30 @@ const useRouterElements = () => {
                   <StoreSetting />
                 </Suspense>
               )
+            },
+            {
+              path: path.shopProductDetail,
+              element: (
+                <Suspense>
+                  <StoreProductDetail />
+                </Suspense>
+              )
+            },
+            {
+              path: path.shopOrderDetail,
+              element: (
+                <Suspense>
+                  <StoreOrderDetail />
+                </Suspense>
+              )
+            },
+            {
+              path: path.shopChats,
+              element: (
+                <Suspense>
+                  <StoreManageChat />
+                </Suspense>
+              )
             }
           ]
         }
@@ -161,11 +275,31 @@ const useRouterElements = () => {
       element: <Navigate to={path.home} replace />
     },
     {
+      path: path.productSearchResult,
+      element: (
+        <MainLayout>
+          <Suspense>
+            <SearchResultPage />
+          </Suspense>
+        </MainLayout>
+      )
+    },
+    {
       path: path.categoryProduct,
       element: (
         <MainLayout>
           <Suspense>
             <CategoryPage />
+          </Suspense>
+        </MainLayout>
+      )
+    },
+    {
+      path: path.categoryFeatured,
+      element: (
+        <MainLayout>
+          <Suspense>
+            <FeaturedPage />
           </Suspense>
         </MainLayout>
       )
@@ -185,13 +319,21 @@ const useRouterElements = () => {
       )
     },
     {
-      path: path.editProduct,
+      path: path.customProduct,
       element: (
         <Suspense>
           <EditorPage />
         </Suspense>
         // <MainLayout>
         // </MainLayout>
+      )
+    },
+    {
+      path: '/add-sample',
+      element: (
+        <MainLayout>
+          <AddSample />
+        </MainLayout>
       )
     },
     {

@@ -10,20 +10,16 @@ import UserImg from 'src/assets/user.svg'
 import './Header.style.scss'
 import useMyStores from 'src/hooks/useMyStores'
 import { AppUrls } from 'src/config/config'
+import Cart from '../Cart/Cart'
+import UserDropdown from '../UserDropdown/UserDropdown'
 
 type Props = {}
 
 const Header = (props: Props) => {
-  const { isAuthenticated, profile, setIsAuthenticated, setProfile } = useContext(AppContext)
-  const [storeList, isLoading] = useMyStores()
+  const { isAuthenticated } = useContext(AppContext)
+  const { storeList, isLoading } = useMyStores()
   const navigate = useNavigate()
   const { pathname } = useLocation()
-
-  const handleSignOut = () => {
-    setIsAuthenticated(false)
-    setProfile(null)
-    clearLS()
-  }
 
   return (
     <nav className='fixed left-0 right-0 top-0 z-50 bg-white shadow-md'>
@@ -52,6 +48,7 @@ const Header = (props: Props) => {
               </>
             ) : (
               <div className='flex items-center'>
+                {/* My store */}
                 <div className='mr-6'>
                   <Dropdown
                     classStyleChildren='flex items-center rounded-lg p-2 font-semibold text-gray-900 hover:bg-gray-200'
@@ -77,7 +74,7 @@ const Header = (props: Props) => {
                             storeList.map((store) => (
                               <li key={store?._id}>
                                 <Link
-                                  to={AppUrls.shopSetting(store?._id)}
+                                  to={AppUrls.shopManageProducts(store?._id)}
                                   className='flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
                                 >
                                   <svg
@@ -159,7 +156,7 @@ const Header = (props: Props) => {
                     </svg>
                     <span className='mx-4'>My store</span>
                     <svg
-                      className='ml-2.5 h-2.5 w-2.5 transition-transform group-hover:rotate-180'
+                      className='ml-0 h-2.5 w-2.5 transition-transform group-hover:rotate-180'
                       aria-hidden='true'
                       xmlns='http://www.w3.org/2000/svg'
                       fill='none'
@@ -175,47 +172,14 @@ const Header = (props: Props) => {
                     </svg>
                   </Dropdown>
                 </div>
+
                 {/* User */}
                 <div>
-                  <Dropdown
-                    classStyleChildren='mr-3 p-[0px] flex rounded-full bg-gray-200 text-sm focus:ring-4 focus:ring-gray-300 md:mr-0'
-                    classStyleOptions='my-2 min-w-max list-none divide-y divide-gray-100 rounded-lg bg-white text-base shadow-around'
-                    options={() => (
-                      <>
-                        <div className='px-4 py-3'>
-                          <span className='block text-sm text-gray-900'>{profile?.fullName}</span>
-                          <span className='block truncate  text-sm text-gray-500'>{profile?.email}</span>
-                        </div>
-                        <ul className='py-2' aria-labelledby='user-menu-button'>
-                          {UserOptions.map((option) => (
-                            <li key={option.name}>
-                              <Link to={option.url} className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
-                                {option.name}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                        <div className='py-1'>
-                          <Link
-                            to='/login'
-                            onClick={handleSignOut}
-                            className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
-                          >
-                            Sign out
-                          </Link>
-                        </div>
-                      </>
-                    )}
-                  >
-                    <span className='sr-only'>Open user menu</span>
-                    {profile?.profilePicture ? (
-                      <img className='h-8 w-8 rounded-full' src={profile?.profilePicture} alt='user photo' />
-                    ) : (
-                      <div className='h-8 w-8 rounded-full p-1.5'>
-                        <img src={UserImg} alt='user photo' />
-                      </div>
-                    )}
-                  </Dropdown>
+                  <UserDropdown />
+                </div>
+
+                <div className='ml-6'>
+                  <Cart />
                 </div>
               </div>
             )}

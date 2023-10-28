@@ -1,0 +1,8 @@
+.cart__wrapper::before {
+  content: '';
+  position: absolute;
+  //   background: #000;
+  height: 30px;
+  width: 100%;
+  top: -8px;
+}

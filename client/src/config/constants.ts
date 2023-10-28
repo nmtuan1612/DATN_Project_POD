@@ -3,6 +3,11 @@ import { AppUrls } from './config'
 import path from './path'
 
 export const primaryColor = '#955de6'
+export const SHIPPING__FEE = 6.5
+export const UP__SIZE__FEE = 0.6
+export const LOGO__FEE = 2.4
+export const FULL__TEXTURE__FEE = 5.0
+export const PROFIT__MARGIN = 0.45
 
 // NavLinks
 export const NavbarLinks = [
@@ -39,10 +44,17 @@ export const UserOptions = [
   //   url: path.userDetail
   // },
   {
-    name: 'Manage stores',
+    name: 'Manage Stores',
     url: path.userStores,
     icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z" />
+    </svg>`
+  },
+  {
+    name: 'My Orders',
+    url: path.userOrders,
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
     </svg>`
   },
   {
@@ -72,6 +84,13 @@ export const StoreOptions = [
     </svg>`
   },
   {
+    name: 'Chats',
+    url: AppUrls.shopChats,
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+    </svg>`
+  },
+  {
     name: 'Settings',
     url: AppUrls.shopSetting,
     icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -86,21 +105,25 @@ export const Categories = [
   {
     name: "Men's Clothes",
     id: "men's-clothes",
+    value: 'men',
     thumbnail: men
   },
   {
     name: "Women's Clothes",
     id: "women's-clothes",
+    value: 'women',
     thumbnail: women
   },
   {
     name: 'Home & Living',
     id: 'home-&-living',
+    value: 'home&living',
     thumbnail: homeAndLiving
   },
   {
     name: 'Accessories',
     id: 'accessories',
+    value: 'accessories',
     thumbnail: accessories
   }
 ]
@@ -128,12 +151,12 @@ export const EditorTabs = [
 export const FilterTabs = [
   {
     name: 'logoTab',
-    tag: '',
+    tag: 'Logo',
     icon: logoShirt
   },
   {
     name: 'stylishTab',
-    tag: '',
+    tag: 'Print full',
     icon: stylishShirt
   }
 ] as const
@@ -149,13 +172,16 @@ export const DecalTypes = {
   }
 } as const
 
+export const DecalPosition = []
+
 // Aside filters
+// export const FilterTypes = []
 export const ClothingTypes = [
-  { name: 'T-shirts', id: '1' },
-  { name: 'Long Sleeves', id: '2' },
-  { name: 'Tank Tops', id: '3' },
-  { name: 'Skirts & Dresses', id: '4' },
-  { name: 'Bottoms', id: '5' }
+  { name: 'T-shirts', _id: '64fabb6351fa4ae639ca350d' },
+  { name: 'Long Sleeves', _id: '64fabbd151fa4ae639ca350e' },
+  { name: 'Tank Tops', _id: '64fabc8e51fa4ae639ca350f' },
+  { name: 'Skirts & Dresses', _id: '64fabcb151fa4ae639ca3510' },
+  { name: 'Bottoms', _id: '64fabcc851fa4ae639ca3511' }
 ]
 
 export const ClothingSizes = [
@@ -168,19 +194,19 @@ export const ClothingSizes = [
 ]
 
 export const HomeAndLivingTypes = [
-  { name: 'Mugs', id: '6' },
-  { name: 'Bottles & Tumblers', id: '7' },
-  { name: 'Poster', id: '8' },
-  { name: 'Notebooks', id: '9' },
-  { name: 'Other', id: '' }
+  { name: 'Mugs', _id: '64fabd6351fa4ae639ca3512' },
+  { name: 'Bottles & Tumblers', _id: '64fabd7c51fa4ae639ca3513' },
+  { name: 'Poster', _id: '64fabdd851fa4ae639ca3514' },
+  { name: 'Notebooks', _id: '64fabdef51fa4ae639ca3515' },
+  { name: 'Other', _id: '10' }
 ]
 
 export const AccessoriesTypes = [
-  { name: 'Phone Cases', id: '' },
-  { name: 'Bags', id: '' },
-  { name: 'Mouse Pads', id: '' },
-  { name: 'Hats', id: '' },
-  { name: 'Other', id: '' }
+  { name: 'Phone Case', _id: '11' },
+  { name: 'Bags', _id: '12' },
+  { name: 'Mouse Pads', _id: '13' },
+  { name: 'Hats', _id: '14' },
+  { name: 'Other', _id: '15' }
 ]
 
 export const OtherSizes = [{ name: 'One size', id: 'one_size' }]
@@ -195,6 +221,27 @@ export const ShippingLocations = [
 // Sortby filters
 export const SortByFilters = [
   { title: 'Popularity', id: 'popularity' },
-  { title: 'Lowest price', id: 'lowest_price' },
-  { title: 'Highest price', id: 'highest_price' }
+  { title: 'Price: Low - high', id: 'low_to_high' },
+  { title: 'Price: High - low', id: 'high_to_low' }
+]
+
+// Product status filters
+export const StoreProductStatus = [
+  { name: 'Published', id: 'published' },
+  { name: 'Unpublished', id: 'unpublished' }
+]
+
+// Decal logos sample
+export const SampleLogos = [
+  'https://res.cloudinary.com/duyb3dqsr/image/upload/v1694688471/POD_Project/threejs.png',
+  'https://res.cloudinary.com/duyb3dqsr/image/upload/v1694688471/POD_Project/react.png'
+]
+
+// Order status
+export const OrderStatus = [
+  { id: 'created', name: 'Created' },
+  { id: 'on-hold', name: 'On hold' },
+  { id: 'shipped', name: 'Shipped' },
+  { id: 'delivered', name: 'Delivered' },
+  { id: 'cancelled', name: 'Cancelled' }
 ]

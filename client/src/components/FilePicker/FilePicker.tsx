@@ -1,5 +1,7 @@
 import React, { useRef } from 'react'
 import CustomButton from '../CustomButton/CustomButton'
+import state from 'src/store'
+import { EditorTabs } from 'src/config/constants'
 
 type Props = {
   file: any
@@ -42,7 +44,7 @@ const FilePicker = ({ file, setFile, readFile }: Props) => {
         </label>
 
         {file && (
-          <div className='h-[200px] w-full transition-all duration-1000 ease-in'>
+          <div className='h-[200px] w-full overflow-hidden rounded-md border transition-all duration-1000 ease-in'>
             <img src={URL.createObjectURL(file)} alt='' className='h-full w-full object-cover' />
           </div>
         )}
@@ -55,14 +57,20 @@ const FilePicker = ({ file, setFile, readFile }: Props) => {
           type='outline'
           title='Set logo'
           disabled={!file}
-          handleClick={() => readFile('logo')}
+          handleClick={() => {
+            state.logoOrigin = EditorTabs[1].name
+            readFile('logo')
+          }}
           customStyles='text-xs'
         />
         <CustomButton
           type='filled'
           title='Cover'
           disabled={!file}
-          handleClick={() => readFile('full')}
+          handleClick={() => {
+            state.fullTextureOrigin = EditorTabs[1].name
+            readFile('full')
+          }}
           customStyles='text-xs'
         />
       </div>

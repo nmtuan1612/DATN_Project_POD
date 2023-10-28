@@ -6,6 +6,11 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --primary-color: #b988f0;
+  --toastify-color-success: #b988f0;
+}
+
 html {
   font-family: 'Inter', sans-serif;
 }
@@ -14,6 +19,24 @@ html {
   html {
     font-family: 'Inter var', sans-serif;
   }
+}
+
+input[type='range'] {
+  // &::-webkit-slider-runnable-track {
+  //   background: #b988f0;
+  //   // height: 0.5rem;
+  // }
+  &::-webkit-slider-thumb {
+    background: #fff;
+    border: 2px solid #b988f0;
+    height: 14px;
+    width: 14px;
+    border-radius: 50%;
+  }
+}
+
+.nav__link-item {
+  @apply border-b border-gray-100 py-2 pl-3 pr-4 text-gray-900 hover:bg-gray-50 md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-primary;
 }
 
 .slick-slider {
@@ -58,7 +81,11 @@ input[type='file'] {
 }
 
 .tab__title {
-  @apply text-2xl font-semibold text-gray-900;
+  @apply text-2xl font-semibold text-gray-600;
+}
+
+.button__link {
+  @apply flex items-center gap-3 rounded-lg px-3 py-1 font-medium text-primary hover:bg-primary hover:text-white focus:outline-none md:py-1.5;
 }
 
 .side__nav-icon > svg {
@@ -78,4 +105,23 @@ input[type='file'] {
 
 .sketch-picker > div:nth-child(3) {
   // display: none !important;
+}
+
+.custom__border {
+  height: 0.1875rem;
+  width: 100%;
+  background-position-x: -1.875rem;
+  background-size: 7.25rem 0.1875rem;
+  margin: 8px 0;
+  background-image: repeating-linear-gradient(
+    45deg,
+    #6fa6d6,
+    #6fa6d6 33px,
+    transparent 0,
+    transparent 41px,
+    #f18d9b 0,
+    #f18d9b 74px,
+    transparent 0,
+    transparent 82px
+  );
 }

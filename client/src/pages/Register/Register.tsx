@@ -97,7 +97,7 @@ const Register = (props: Props) => {
               </div>
               <input
                 type='text'
-                id='email-address-icon'
+                id='email-address'
                 {...register('email')}
                 className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pl-10 text-sm text-gray-700 focus:border-primary focus:outline-none focus:ring-0'
                 placeholder='Your email'
@@ -127,7 +127,7 @@ const Register = (props: Props) => {
               <Input
                 name='password'
                 type='password'
-                id='email-address-icon'
+                id='password'
                 register={register}
                 errorMessage={errors.password?.message}
                 classNameInput='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pl-10 text-sm text-gray-700 focus:border-primary focus:outline-none focus:ring-0'
@@ -160,7 +160,7 @@ const Register = (props: Props) => {
               <Input
                 name='confirm_password'
                 type='password'
-                id='email-address-icon'
+                id='confirm_password'
                 register={register}
                 errorMessage={errors.confirm_password?.message}
                 classNameInput='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pl-10 text-sm text-gray-700 focus:border-primary focus:outline-none focus:ring-0'

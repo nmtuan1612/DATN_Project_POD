@@ -42,6 +42,24 @@ UploadRouter.post('/', fileUpload.single('file'), async (req, res) => {
   }
 })
 
+UploadRouter.post('/base64-img', async (req, res) => {
+  try {
+    if (req.body.image) {
+      console.log(true)
+      cloudinary.uploader.upload(req.body.image, { folder: 'POD_Project' }, (error, result) => {
+        if (result) {
+          console.log(result)
+          res.status(200).json({ message: 'File uploaded successfully.', url: result.url })
+        } else {
+          res.status(400).json(error)
+        }
+      })
+    }
+  } catch (error) {
+    res.status(500).json(error)
+  }
+})
+
 export const deleteFile = async (filename) => {
   // await cloudinary.api.delete_resources([...filename], { type: 'upload', resource_type: 'image' }).then()
   await cloudinary.uploader.destroy(filename, function (result) {

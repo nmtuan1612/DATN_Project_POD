@@ -1,4 +1,5 @@
 import { createContext, useState } from 'react'
+import { ConversationMetaData } from 'src/types/chat.type'
 import { Store } from 'src/types/store.type'
 // import { ExtendedPurchase } from 'src/types/purchase.type'
 import { User } from 'src/types/user.type'
@@ -11,6 +12,8 @@ interface AppContextInterface {
   setProfile: React.Dispatch<React.SetStateAction<User | null>>
   currentStore: Store | null
   setCurrentStore: React.Dispatch<React.SetStateAction<Store | null>>
+  chatMetaData: ConversationMetaData
+  setChatMetaData: React.Dispatch<React.SetStateAction<ConversationMetaData>>
   //   extendedPurchases: ExtendedPurchase[]
   //   setExtendedPurchases: React.Dispatch<React.SetStateAction<ExtendedPurchase[]>>
   reset: () => void
@@ -23,6 +26,8 @@ const initialAppContext: AppContextInterface = {
   setProfile: () => null,
   currentStore: getStoreFromLS(),
   setCurrentStore: () => null,
+  chatMetaData: { chatID: '', otherUserId: '' },
+  setChatMetaData: () => null,
   //   extendedPurchases: [],
   //   setExtendedPurchases: () => null,
   reset: () => null
@@ -35,6 +40,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   //   const [extendedPurchases, setExtendedPurchases] = useState<ExtendedPurchase[]>(initialAppContext.extendedPurchases)
   const [profile, setProfile] = useState<User | null>(initialAppContext.profile)
   const [currentStore, setCurrentStore] = useState<Store | null>(initialAppContext.currentStore)
+  const [chatMetaData, setChatMetaData] = useState<ConversationMetaData>(initialAppContext.chatMetaData)
 
   const reset = () => {
     setIsAuthenticated(false)
@@ -51,6 +57,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setProfile,
         currentStore,
         setCurrentStore,
+        chatMetaData,
+        setChatMetaData,
         // extendedPurchases,
         // setExtendedPurchases,
         reset

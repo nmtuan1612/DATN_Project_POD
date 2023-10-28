@@ -1,204 +1,162 @@
-import React, { useState, useEffect } from 'react'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Link, useNavigate } from 'react-router-dom'
-
-import config from '../../config/config'
+import { useEffect } from 'react'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import productApi from 'src/apis/product.api'
+import Loading from 'src/components/Loading/Loading'
+import { Product, SampleProductDetail } from 'src/types/product.type'
+import { getIdFromNameId } from 'src/utils/utils'
+import { CustomButton } from '../../components'
+import { SampleLogos } from '../../config/constants'
+import { fadeAnimation } from '../../config/motion'
 import state from '../../store'
-import { download } from '../../assets'
-import { downloadCanvasToImage, reader } from '../../config/helpers'
-import { EditorTabs, FilterTabs, DecalTypes } from '../../config/constants'
-import { fadeAnimation, slideAnimation } from '../../config/motion'
-import { AIPicker, ColorPicker, CustomButton, FilePicker, Tab } from '../../components'
-import CanvasModel from 'src/canvas'
 import './EditorPage.style.scss'
+import CustomProductForm from './components/CustomForm/CustomProductForm'
+import CanvasModel from './components/canvas'
 
 type Props = {}
 
-type DecalType = keyof typeof DecalTypes
-
 const EditorPage = (props: Props) => {
-  const [file, setFile] = useState('')
+  const navigate = useNavigate()
+  const { state: routeState } = useLocation()
+  const { productId } = useParams()
 
-  const [prompt, setPrompt] = useState('')
-  const [generatingImg, setGeneratingImg] = useState(false)
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ['product', getIdFromNameId(productId as string)],
+    queryFn: () =>
+      routeState && routeState.productType === 'storeProduct'
+        ? productApi.getStoreProductWithId(productId as string)
+        : productApi.getSampleProductWithId(getIdFromNameId(productId as string)),
+    staleTime: 2 * (60 * 1000)
+  })
+  const product: SampleProductDetail | Product = data?.data?.data
 
-  const [activeEditorTab, setActiveEditorTab] = useState<string>(EditorTabs[0].name)
-  const [activeFilterTab, setActiveFilterTab] = useState({
-    logoTab: true,
-    stylishTab: false
+  useEffect(() => {
+    if (product) {
+      state.modelUrl = product?.modelMetaData?.modelUrl as string
+      if (routeState && routeState.productType === 'storeProduct') {
+        const { customMetadata, modelMetaData } = product as Product
+
+        if (customMetadata?.color) {
+          state.color = customMetadata?.color
+        }
+
+        if (customMetadata?.logo) {
+          state.isLogoTexture = true
+          state.logoDecal = customMetadata.logo
+          state.logoPrintOptions = customMetadata.logoPrintOptions || { scale: modelMetaData.logoScale }
+        }
+
+        if (customMetadata?.fullTexture) {
+          state.isFullTexture = true
+          state.fullDecal = customMetadata.fullTexture
+          state.fullTexturePrintOptions = customMetadata.fullTexturePrintOptions || {
+            scale: modelMetaData.textureScale
+          }
+        }
+      } else {
+        const { modelMetaData } = product as SampleProductDetail
+
+        state.logoPrintOptions.scale = modelMetaData.logoScale
+        state.fullTexturePrintOptions.scale = modelMetaData.textureScale
+      }
+    }
+  }, [product])
+
+  const productMutation = useMutation({ mutationFn: productApi.addStoreProduct })
+  const storeProductMutation = useMutation({
+    mutationFn: (body: any) => productApi.updateStoreProduct(productId as string, body)
   })
 
-  const navigate = useNavigate()
-
-  // show tab content depending on the activeTab
-  const generateTabContent = () => {
-    switch (activeEditorTab) {
-      case 'colorpicker':
-        return <ColorPicker />
-      case 'filepicker':
-        return <FilePicker file={file} setFile={setFile} readFile={readFile} />
-      case 'aipicker':
-        return (
-          <AIPicker prompt={prompt} setPrompt={setPrompt} generatingImg={generatingImg} handleSubmit={handleSubmit} />
-        )
-      default:
-        return null
-    }
-  }
-
-  const handleSubmit = async (type: DecalType) => {
-    if (!prompt) return alert('Please enter a prompt')
-
-    try {
-      setGeneratingImg(true)
-
-      const response = await fetch('http://localhost:8080/api/v1/dalle', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          prompt
-        })
-      })
-
-      const data = await response.json()
-
-      handleDecals(type, `data:image/png;base64,${data.photo}`)
-    } catch (error) {
-      alert(error)
-    } finally {
-      setGeneratingImg(false)
-      setActiveEditorTab(EditorTabs[0].name)
-    }
-  }
-
-  const handleDecals = (type: DecalType, result: string) => {
-    const decalType = DecalTypes[type]
-
-    state[decalType.stateProperty] = result
-
-    if (!activeFilterTab[decalType.filterTab]) {
-      handleActiveFilterTab(decalType.filterTab)
-    }
-  }
-
-  const handleActiveFilterTab = (tabName: string) => {
-    switch (tabName) {
-      case 'logoTab':
-        state.isLogoTexture = !activeFilterTab[tabName]
-        break
-      case 'stylishTab':
-        state.isFullTexture = !activeFilterTab[tabName]
-        break
-      default:
-        state.isLogoTexture = true
-        state.isFullTexture = false
-        break
-    }
-
-    // after setting the state, activeFilterTab is updated
-
-    setActiveFilterTab((prevState) => {
-      return {
-        ...prevState,
-        [tabName]: !prevState[tabName as keyof typeof activeFilterTab]
-      }
-    })
-  }
-
-  const readFile = (type: DecalType) => {
-    reader(file).then((result: any) => {
-      console.log('Read file result:', result)
-      handleDecals(type, result)
-      // setActiveEditorTab('')
-    })
+  const handleExportImage = () => {
+    const link = document.createElement('a')
+    link.setAttribute('download', 'canvas.png')
+    link.setAttribute(
+      'href',
+      document.querySelector('canvas')?.toDataURL('image/png')?.replace('image/png', 'image/octet-stream') as string
+    )
+    link.click()
   }
 
   return (
     <AnimatePresence>
-      {/* <div className='h-fulloverflow-scroll container relative grid max-xl:gap-7 xl:h-full xl:py-6'> */}
-      <div className='app flex h-screen w-screen flex-col overflow-hidden transition-all ease-in'>
-        {/* Header */}
-        <div className='z-20 flex items-center justify-between gap-2 bg-white px-4 py-2 shadow-sm'>
-          <Link to='/' className='logo' style={{ fontSize: 28 }}>
-            <span className='text-primary'>Creo</span>
-            <span className='text-gray-400'>Print</span>
-          </Link>
+      {/* <div className='h-full overflow-scroll container relative grid max-xl:gap-7 xl:h-full xl:py-6'> */}
+      {isLoading || productMutation?.isLoading || storeProductMutation?.isLoading ? (
+        <Loading />
+      ) : (
+        <div className='app flex h-screen w-screen flex-col overflow-hidden transition-all ease-in'>
+          {/* Header */}
+          <div className='z-20 flex items-center justify-between gap-2 bg-white px-4 py-2 shadow-sm'>
+            <Link to='/' className='logo' style={{ fontSize: 28 }}>
+              <span className='text-primary'>Creo</span>
+              <span className='text-gray-400'>Print</span>
+            </Link>
 
-          <motion.div className=' right-5 top-5 z-10' {...fadeAnimation}>
-            <h3 className='text-xl font-semibold text-gray-900'>Men's sport tee</h3>
-          </motion.div>
-
-          <motion.div className=' right-5 top-5 z-10' {...fadeAnimation}>
-            <CustomButton
-              type='filled'
-              title='Go Back'
-              handleClick={() => {
-                navigate(-1)
-              }}
-              customStyles='w-fit px-4 py-2.5 font-bold text-sm'
-            />
-          </motion.div>
-        </div>
-        {/* Content */}
-        <div className='relative h-full w-full bg-blue-50'>
-          <motion.div key='custom' className='absolute left-4 top-6 z-10' {...slideAnimation('left')}>
-            <div className='min-h-full rounded-lg bg-white shadow-around'>
-              {/* Tabs */}
-              <div className='editorTabs-container'>
-                <div className='flex w-[76px] flex-col gap-4'>
-                  {EditorTabs.map((tab) => (
-                    <Tab
-                      key={tab.name}
-                      isActiveTab={activeEditorTab === tab.name}
-                      tab={tab}
-                      handleClick={() => setActiveEditorTab(tab.name)}
-                    />
-                  ))}
-                </div>
-                {generateTabContent()}
-              </div>
-              {/* Footer */}
-              {/* <div className='flex flex-wrap items-center gap-4'>
-                <div>
-                  <label className='relative mb-4 inline-flex cursor-pointer items-center'>
-                    <input type='checkbox' defaultValue='' className='peer sr-only' />
-                    <div className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-0.5 after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800" />
-                    <span className='ml-3 text-sm font-medium text-gray-900 dark:text-gray-300'>Toggle me</span>
-                  </label>
-                  <label className='relative mb-4 inline-flex cursor-pointer items-center'>
-                    <input type='checkbox' defaultValue='' className='peer sr-only' defaultChecked />
-                    <div className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-0.5 after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800" />
-                    <span className='ml-3 text-sm font-medium text-gray-900 dark:text-gray-300'>Checked toggle</span>
-                  </label>
-                  <label className='relative mb-3 inline-flex cursor-pointer items-center'>
-                    <input type='checkbox' defaultValue='' className='peer sr-only' disabled />
-                    <div className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-0.5 after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white dark:border-gray-600 dark:bg-gray-700" />
-                    <span className='ml-3 text-sm font-medium text-gray-400 dark:text-gray-500'>Disabled toggle</span>
-                  </label>
-                </div>
-              </div> */}
-            </div>
-          </motion.div>
-
-          <motion.div className='h-full w-full pl-[200px]' {...fadeAnimation}>
-            <CanvasModel />
-          </motion.div>
-
-          <motion.div className='filtertabs-container' {...slideAnimation('up')}>
-            {FilterTabs.map((tab) => (
-              <Tab
-                key={tab.name}
-                tab={tab}
-                isFilterTab
-                isActiveTab={activeFilterTab[tab.name]}
-                handleClick={() => handleActiveFilterTab(tab.name)}
+            <motion.div className='right-5 top-5 z-10' {...fadeAnimation}>
+              <h3 className='text-xl font-semibold text-gray-900'>{product.name}</h3>
+            </motion.div>
+            <div></div>
+          </div>
+          {/* Content */}
+          <div className='relative h-full w-full bg-blue-50'>
+            <motion.div className='absolute right-5 top-5 z-20' {...fadeAnimation}>
+              <CustomButton
+                type='filled'
+                title='Go Back'
+                handleClick={() => {
+                  navigate(-1)
+                }}
+                customStyles='w-fit px-4 py-2.5 font-bold text-sm'
+                disabled={productMutation.isLoading || storeProductMutation.isLoading}
               />
-            ))}
-          </motion.div>
+            </motion.div>
+            <CustomProductForm
+              refetch={refetch}
+              product={product}
+              productMutation={productMutation}
+              storeProductMutation={storeProductMutation}
+            />
+
+            {product && (
+              <motion.div className='relative h-full w-full md:pl-[200px]' {...fadeAnimation}>
+                <CanvasModel product={product} />
+
+                <div className='decals-container md:pl-[200px]'>
+                  <h3 className='font-semibold text-primary'>Sample Logo</h3>
+                  {SampleLogos.map((logo) => (
+                    <div key={logo} className={`decal`} onClick={() => (state.logoDecal = logo)}>
+                      <img src={logo} alt='brand' />
+                    </div>
+                  ))}
+                  <CustomButton
+                    customStyles='md:ml-10'
+                    title={
+                      <>
+                        Download
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          viewBox='0 0 20 20'
+                          fill='currentColor'
+                          className='ml-[6px] h-4 w-4'
+                        >
+                          <path
+                            fillRule='evenodd'
+                            d='M1 8a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 018.07 3h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0016.07 6H17a2 2 0 012 2v7a2 2 0 01-2 2H3a2 2 0 01-2-2V8zm13.5 3a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM10 14a3 3 0 100-6 3 3 0 000 6z'
+                            clipRule='evenodd'
+                          />
+                        </svg>
+                      </>
+                    }
+                    type='filled'
+                    handleClick={handleExportImage}
+                    disabled={productMutation.isLoading || storeProductMutation.isLoading}
+                  />
+                </div>
+              </motion.div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </AnimatePresence>
   )
 }
@@ -219,3 +177,18 @@ export default EditorPage
   <AiFillCamera size="1.3em" />
 </button> */
 }
+
+// useEffect(() => {
+//   const test = async () => {
+//     if (!routeState && product) {
+//       const variants = generateProductVariants({
+//         _id: product._id,
+//         price: product.price,
+//         sizeGuides: product.sizeGuides
+//       })
+//       const response = await productApi.addProductVariants({ variants })
+//       console.log(response)
+//     }
+//   }
+//   test()
+// }, [product, routeState])

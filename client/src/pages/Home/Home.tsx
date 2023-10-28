@@ -8,15 +8,19 @@ import CategoryList from './components/CategoryList'
 import CustomButton from '../../components/CustomButton/CustomButton'
 import FeaturedProducts from './components/FeaturedProducts'
 import InputSearch from 'src/components/InputSearch/InputSearch'
+import { useLocation } from 'react-router-dom'
+import useQueryConfig from 'src/hooks/useQueryConfig'
 
 const Home = () => {
   const snap = useSnapshot(state)
+  const queryConfig = useQueryConfig()
+  const { pathname } = useLocation()
 
   return (
     <AnimatePresence>
       <div className='home container'>
         {/* search input */}
-        <InputSearch />
+        {/* <InputSearch placeholder='Search sample product...' pathname={pathname} queryConfig={queryConfig} /> */}
         {/* Banner */}
         <div className='grid grid-cols-3 rounded-lg bg-slate-200'>
           <div className='col-span-2'>
@@ -30,8 +34,8 @@ const Home = () => {
               >
                 <motion.div {...headContentAnimation} className='flex flex-col gap-2 pl-6 pt-4'>
                   <p className='max-w-lg text-base font-normal text-gray-900'>
-                    <strong>Unleash your imagination</strong>
-                    <span className='mt-2 block'>
+                    <span className='text-[18px] font-semibold text-primary'>Unleash your imagination</span>
+                    <span className='mt-2 block text-gray-600'>
                       Create your unique and exclusive products with our brand-new 3D customization tool.
                     </span>
                   </p>
@@ -69,9 +73,9 @@ const Home = () => {
         <CategoryList />
 
         <motion.div {...slideAnimation('up')} className='mt-6 flex flex-col gap-6 md:gap-8'>
-          <FeaturedProducts title='Bestsellers' hiddenTag='Bestseller' />
-          <FeaturedProducts title='New Arrivals' hiddenTag='New' />
-          <FeaturedProducts title='Eco-friendly' hiddenTag='Eco' />
+          <FeaturedProducts title='Bestsellers' hiddenTag='Bestsellers' />
+          <FeaturedProducts title='New Arrivals' hiddenTag='New Arrivals' />
+          <FeaturedProducts title='Eco-friendly' hiddenTag='Eco-friendly' />
         </motion.div>
       </div>
     </AnimatePresence>

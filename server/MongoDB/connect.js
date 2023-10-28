@@ -1,9 +1,10 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose'
 
 const connectDB = (url) => {
-  mongoose.set("strictQuery", true);
+  mongoose.set('strictQuery', true)
   mongoose
     .connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log("MongoDB connected"));
-};
-export default connectDB;
+    .then(() => console.log('MongoDB connected'))
+    .catch((error) => console.log(error))
+}
+export default connectDB

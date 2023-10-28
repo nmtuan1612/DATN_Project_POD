@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useMatch, useParams } from 'react-router-dom'
 import classNames from 'classnames'
 import { StoreOptions, UserOptions } from 'src/config/constants'
 import { AppContext } from 'src/context/app.context'
@@ -8,13 +8,29 @@ import Dropdown from 'src/components/Dropdown/Dropdown'
 import path from 'src/config/path'
 import useMyStores from 'src/hooks/useMyStores'
 import { AppUrls } from 'src/config/config'
+import { Store } from 'src/types/store.type'
 
 type Props = {}
 
 const StoreSideNav = (props: Props) => {
   const { currentStore } = useContext(AppContext)
+  const { storeList, isLoading } = useMyStores()
+
   const { pathname } = useLocation()
-  const [storeList, isLoading] = useMyStores()
+  const { shopId } = useParams()
+
+  const matchProductPage = useMatch(path.shopManageProducts)
+  const matchOrderPage = useMatch(path.shopManageOrder)
+
+  const generateLink = (store: Store) => {
+    if (matchProductPage) {
+      return AppUrls.shopManageProducts(store._id)
+    } else if (matchOrderPage) {
+      return AppUrls.shopManageOrder(store._id)
+    } else {
+      return AppUrls.shopSetting(store._id)
+    }
+  }
 
   return (
     <div className='flex flex-col pr-6'>
@@ -50,11 +66,11 @@ const StoreSideNav = (props: Props) => {
                 </div>
               ) : storeList?.length ? (
                 storeList
-                  .filter((store) => store._id !== currentStore?._id)
+                  .filter((store: Store) => store._id !== currentStore?._id)
                   .map((store) => (
                     <li key={store?._id}>
                       <Link
-                        to={AppUrls.shopSetting(store?._id)}
+                        to={generateLink(store)}
                         className='flex items-center gap-2 truncate px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
                       >
                         <svg
@@ -143,6 +159,7 @@ const StoreSideNav = (props: Props) => {
               .url(currentStore?._id as string)
               .split('/')
               .pop() === pathname.split('/').pop()
+
           return (
             <li key={option.name}>
               <Link

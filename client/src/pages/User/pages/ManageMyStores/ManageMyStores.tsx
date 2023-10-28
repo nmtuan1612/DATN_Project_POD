@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import storeImage from 'src/assets/store.svg'
 import { CustomButton } from 'src/components'
 import config, { AppUrls } from 'src/config/config'
@@ -14,12 +14,37 @@ type Props = {}
 
 const ManageMyStores = (props: Props) => {
   const { setCurrentStore } = useContext(AppContext)
-  const [storeList, isLoading] = useMyStores()
+  const { storeList, isLoading } = useMyStores()
+
+  const navigate = useNavigate()
 
   return (
     <AnimatePresence>
       <motion.div {...slideAnimation('right')} className='container'>
-        <h2 className='text-2xl font-semibold text-gray-900'>My Stores</h2>
+        <div className='flex items-center justify-between'>
+          <h2 className='text-2xl font-semibold text-gray-900'>My Stores</h2>
+          <CustomButton
+            type='filled'
+            title={
+              <>
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  viewBox='0 0 20 20'
+                  fill='currentColor'
+                  className='mr-1 h-5 w-5'
+                >
+                  <path
+                    fillRule='evenodd'
+                    d='M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z'
+                    clipRule='evenodd'
+                  />
+                </svg>
+                Add new store
+              </>
+            }
+            handleClick={() => navigate(AppUrls.createShop)}
+          />
+        </div>
         {isLoading ? (
           <div role='status' className='mt-8 flex animate-pulse flex-col gap-5 rounded'>
             {Array(3)
@@ -54,7 +79,7 @@ const ManageMyStores = (props: Props) => {
                     <div className=''>
                       <a
                         target='_blank'
-                        href={`${config.development.frontendUrl}${AppUrls.shopDetail(store?._id)}`}
+                        href={`${config.development.frontendUrl}${AppUrls.shopOnlineDetail(store?._id)}`}
                         className='mb-2 block text-xl font-semibold hover:text-primary'
                       >
                         {store.storeName}

@@ -1,42 +1,30 @@
-import React from 'react'
-import AsideFilters from './components/AsideFilters/AsideFilters'
-import SortFilters from './components/SortFilters/SortFilters'
-import { productMockData } from 'src/config/mockData'
-import ProductCard from 'src/components/ProductCard/ProductCard'
-import BreadCrumbs from 'src/components/BreadCrumbs/BreadCrumbs'
-import { AnimatePresence, motion } from 'framer-motion'
-import { fadeAnimation, slideAnimation } from 'src/config/motion'
+import { useQuery } from '@tanstack/react-query'
+import { useLocation } from 'react-router-dom'
+import productApi from 'src/apis/product.api'
+import useQueryConfig from 'src/hooks/useQueryConfig'
+import { ProductListConfig } from 'src/types/product.type'
+import CommonProductList from '../CommonProductList/pages/CommonProductList'
 
 type Props = {}
 
-const productsData = Array(20).fill(productMockData)
-
 const CategoryPage = (props: Props) => {
-  return (
-    <AnimatePresence>
-      <motion.section
-        {...fadeAnimation}
-        className='container grid grid-cols-12 gap-6 overflow-scroll py-4 md:py-6 xl:gap-7'
-      >
-        <motion.div {...slideAnimation('left')} className='col-span-12'>
-          <BreadCrumbs />
-        </motion.div>
-        <motion.div {...slideAnimation('left')} className='col-span-3'>
-          <AsideFilters />
-        </motion.div>
-        <motion.div {...slideAnimation('right')} className='col-span-9'>
-          <SortFilters />
-          <div className='mt-6 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4'>
-            {productsData.map((product) => (
-              <div className='col-span-1' key={product._id}>
-                <ProductCard productData={product} />
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      </motion.section>
-    </AnimatePresence>
-  )
+  const { pathname } = useLocation()
+  const queryConfig = useQueryConfig()
+  queryConfig.categoryId = pathname.split('/').pop()
+
+  const {
+    data: productsData,
+    isLoading,
+    error
+  } = useQuery({
+    queryKey: ['sample_products', queryConfig],
+    queryFn: () => productApi.getListSampleProducts(queryConfig as ProductListConfig),
+    staleTime: 2 * (60 * 1000)
+  })
+
+  const products = productsData?.data?.data
+
+  return <CommonProductList isLoading={isLoading} queryConfig={queryConfig} products={products} />
 }
 
 export default CategoryPage

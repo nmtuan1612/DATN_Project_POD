@@ -34,6 +34,7 @@ export const schema = yup.object({
   // }),
   name: yup.string().trim().required('Tên sản phẩm là bắt buộc')
 })
+export type Schema = yup.InferType<typeof schema>
 
 export const userSchema = yup.object({
   businessName: yup.string().max(160, 'Max length is 160 characters!'),
@@ -42,6 +43,8 @@ export const userSchema = yup.object({
   country: yup.string().max(50, 'Max length is 50 characters!'),
   city: yup.string().max(50, 'Max length is 50 characters!'),
   province: yup.string().max(50, 'Max length is 50 characters!'),
+  district: yup.string().max(50, 'Max length is 50 characters!'),
+  ward: yup.string().max(50, 'Max length is 50 characters!'),
   addressDetail: yup.string().max(160, 'Max length is 160 characters!'),
   zipCode: yup.string().max(20, 'Max length is 20 characters!'),
   profilePicture: yup.string().max(1000, 'Max length is 1000 characters!'),
@@ -54,8 +57,7 @@ export const userSchema = yup.object({
 
 export type UserSchema = yup.InferType<typeof userSchema>
 
-export type Schema = yup.InferType<typeof schema>
-
+// Store
 export const storeSchema = yup.object({
   storeName: yup
     .string()
@@ -71,5 +73,34 @@ export const storeSchema = yup.object({
   logo: yup.string().max(1000, 'Max length is 1000 characters!'),
   acceptTerm: yup.boolean().required('Accept our Terms of Service to create store!')
 })
-
 export type StoreSchema = yup.InferType<typeof storeSchema>
+
+// Purchase
+export const purchaseSchema = yup.object({
+  fullName: yup.string().required('Full name is required').max(160, 'Max length is 160 characters!'),
+  phoneNumber: yup.string().required('Phone number is required').max(20, 'Max length is 20 characters!'),
+  country: yup.string().required('Country is required').max(50, 'Max length is 50 characters!'),
+  province: yup.string().required('Province name is required').max(50, 'Max length is 50 characters!'),
+  district: yup.string().required('District name is required').max(50, 'Max length is 50 characters!'),
+  ward: yup.string().required('Ward name is required').max(50, 'Max length is 50 characters!'),
+  addressDetail: yup.string().required('Address detail is required').max(160, 'Max length is 160 characters!')
+})
+
+export type PurchaseSchema = yup.InferType<typeof purchaseSchema>
+
+// Product
+export const productSchema = yup.object({
+  name: yup.string().required('Product name is required'),
+  description: yup
+    .string()
+    // .required('Description is required')
+    .min(10, 'Min length is 10 characters!')
+    .max(1000, 'Max length is 1000 characters!'),
+  details: yup
+    .string()
+    // .required('Description is required')
+    .min(10, 'Min length is 10 characters!')
+    .max(1000, 'Max length is 1000 characters!'),
+  storeIds: yup.array().min(1, 'Select at least one store!')
+})
+export type ProductSchema = yup.InferType<typeof productSchema>
