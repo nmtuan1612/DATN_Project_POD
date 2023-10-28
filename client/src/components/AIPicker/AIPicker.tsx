@@ -5,6 +5,7 @@ import { DecalTypes, EditorTabs } from 'src/config/constants'
 import commonApi from 'src/apis/common.api'
 import { File } from 'buffer'
 import state from 'src/store'
+import config from 'src/config/config'
 
 type DecalType = keyof typeof DecalTypes
 
@@ -27,7 +28,7 @@ const AIPicker = ({ prompt, setPrompt, aiFile, setAiFile, handleDecals }: Props)
     try {
       setGeneratingImg(true)
 
-      const response = await fetch('http://localhost:8080/api/v1/dalle', {
+      const response = await fetch(`${config.development.backendUrl}/dalle`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
