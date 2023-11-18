@@ -33,7 +33,7 @@ const StoreOnlineCart = (props: Props) => {
   const { data, isLoading } = useQuery({
     queryKey: ['list_variants', allVariantIds],
     queryFn: () => productApi.getListProductVariants({ listIds: allVariantIds }),
-    enabled: Boolean(allVariantIds.length),
+    enabled: Boolean(allVariantIds?.length),
     staleTime: 5 * 1000
   })
 

@@ -54,7 +54,7 @@ const UserChats = (props: Props) => {
                 handleClick={() => setOpenChat(true)}
               />
               <div className='5 absolute -right-1 -top-1 rounded-lg border border-white bg-primary px-1.5 text-xs text-white'>
-                {conversations.length}
+                {conversations?.length}
               </div>
             </div>
           </div>
