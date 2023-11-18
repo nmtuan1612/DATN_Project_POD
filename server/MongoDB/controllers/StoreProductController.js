@@ -7,18 +7,18 @@ export const createNewProduct = async (req, res) => {
   const data = req.body
   try {
     if (data) {
-      const oldProduct = await StoreProductModel.findOne({
-        name: data.name,
-        storeId: new mongoose.Schema.ObjectId(data.storeId)
-      })
-      if (oldProduct) {
-        return res.status(400).send('This product already exists')
-      } else {
-        // console.log({ ...data, storeId: new mongoose.Types.ObjectId(data.storeId) })
-        const product = new StoreProductModel({ ...data, storeId: new mongoose.Types.ObjectId(data.storeId) })
-        const newProduct = await product.save()
-        res.status(201).json({ message: 'Product created successfully!', data: newProduct })
-      }
+      // const oldProduct = await StoreProductModel.findOne({
+      //   name: data.name,
+      //   storeId: new mongoose.Types.ObjectId(data.storeId)
+      // })
+      // if (oldProduct) {
+      //   return res.status(400).send('This product already exists')
+      // } else {
+      // console.log({ ...data, storeId: new mongoose.Types.ObjectId(data.storeId) })
+      const product = new StoreProductModel({ ...data, storeId: new mongoose.Types.ObjectId(data.storeId) })
+      const newProduct = await product.save()
+      res.status(201).json({ message: 'Product created successfully!', data: newProduct })
+      // }
     }
   } catch (error) {
     res.status(500).json(error)
@@ -50,7 +50,11 @@ export const updateStoreProduct = async (req, res) => {
   try {
     if (id) {
       if (req.body.name) {
-        const oldProduct = await StoreProductModel.findOne({ name: req.body.name })
+        const oldProduct = await StoreProductModel.findOne({
+          name: req.body.name,
+          storeId: new mongoose.Types.ObjectId(req.body.storeId)
+        })
+        console.log(oldProduct._id.toString())
         if (oldProduct._id.toString() !== id) {
           return res.status(400).send('This product name already exists')
         }

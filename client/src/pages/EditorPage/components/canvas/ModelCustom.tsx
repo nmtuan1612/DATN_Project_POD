@@ -126,10 +126,11 @@ type Props = {
 
 const ModelCustom = ({ product: { modelMetaData } }: Props) => {
   const snap = useSnapshot(state)
-  console.log('modelMetaData:', modelMetaData)
   const { nodes, materials, sence }: any = useGLTF<string>(modelMetaData?.modelUrl as string)
+
   console.log(nodes)
   console.log(materials)
+  // console.log(snap.isLogoTexture)
   const textRef = useRef()
 
   const logoTexture = useTexture(snap.logoDecal)
@@ -164,8 +165,10 @@ const ModelCustom = ({ product: { modelMetaData } }: Props) => {
             {snap.isFullTexture && (
               <Decal
                 position={modelMetaData.fullTexturePosition}
+                // position={[0, 0, 0]}
                 rotation={[0, 0, 0]}
                 scale={snap.fullTexturePrintOptions.scale}
+                // scale={20}
                 map={fullTexture}
               >
                 {/* <meshStandardMaterial map={fullTexture} side={1} /> */}
@@ -176,8 +179,10 @@ const ModelCustom = ({ product: { modelMetaData } }: Props) => {
             {snap.isLogoTexture && (
               <Decal
                 position={modelMetaData.logoPosition}
+                // position={[0, 0, 0.1]}
                 rotation={[0, 0, 0]}
                 scale={snap.logoPrintOptions.scale}
+                // scale={0.5}
                 map={logoTexture}
                 map-anisotropy={16}
                 depthTest={true}
@@ -230,6 +235,6 @@ const ModelCustom = ({ product: { modelMetaData } }: Props) => {
     </group>
   )
 }
-// useGLTF.preload(state.modelUrl)
+useGLTF.preload(state.modelUrl)
 
 export default ModelCustom

@@ -331,6 +331,7 @@ const StoreManageProducts = (props: Props) => {
         {/* Confirm delete modal */}
         <Modal
           visible={confirmVisible}
+          canOk={Boolean(listIds?.length)}
           onOk={handleDelete}
           isLoading={deleteProductMutation.isLoading}
           onCancel={() => {

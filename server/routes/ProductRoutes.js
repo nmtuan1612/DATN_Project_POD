@@ -2,6 +2,7 @@ import express from 'express'
 import tokenMiddleWare from '../MiddleWare/VerifyAccessToken.js'
 import {
   AddSampleProductToDB,
+  edit3DModelMesh,
   getListSampleProducts,
   getSampleProductWithId,
   getTypes,
@@ -26,6 +27,7 @@ import {
 const ProductRouter = express.Router()
 
 ProductRouter.post('/new-sample', AddSampleProductToDB)
+// ProductRouter.put('/new-sample', edit3DModelMesh)
 ProductRouter.get('/sample', getListSampleProducts)
 ProductRouter.get('/sample/search', searchSampleProducts)
 ProductRouter.get('/sample/:id', getSampleProductWithId)

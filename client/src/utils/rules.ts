@@ -101,6 +101,7 @@ export const productSchema = yup.object({
     // .required('Description is required')
     .min(10, 'Min length is 10 characters!')
     .max(1000, 'Max length is 1000 characters!'),
-  storeIds: yup.array().min(1, 'Select at least one store!')
+  status: yup.array(),
+  storeIds: yup.array().required().min(1, 'Select at least one store!')
 })
 export type ProductSchema = yup.InferType<typeof productSchema>

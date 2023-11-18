@@ -5,6 +5,7 @@ import productApi from 'src/apis/product.api'
 import Modal from 'src/components/Modal/Modal'
 import useMyStores from 'src/hooks/useMyStores'
 import { Product } from 'src/types/product.type'
+import { generateProductVariants } from 'src/utils/utils'
 
 type Props = {
   visible: boolean
@@ -30,14 +31,27 @@ const CopyProductsToStoresModal = ({ visible, listIds, onCancel, products }: Pro
   const handleCopyToStores = async () => {
     if (selectedStores?.length) {
       const selectedProducts = products.filter((product) => listIds.includes(product._id))
-      console.log(selectedProducts)
+      // console.log(selectedProducts)
 
       for (const storeId of selectedStores) {
         for (const product of selectedProducts) {
           const { _id, ...otherDetails } = product
-          await productApi.addStoreProduct({ ...otherDetails, storeId: storeId })
+          const newProduct = await productApi.addStoreProduct({ ...otherDetails, variants: [], storeId: storeId })
+          const productId = newProduct?.data?.data?._id
+          if (productId) {
+            const variants = generateProductVariants({
+              _id: productId,
+              price: product.price,
+              sizeGuides: product.sizeGuides,
+              printAreas: product.printAreas
+            })
+            await productApi.addProductVariants({ variants })
+          }
         }
       }
+      toast.success(`${selectedProducts.length} products copied to ${selectedStores.length} stores.`, {
+        autoClose: 1000
+      })
       onCancel()
     } else {
       toast.error('Select store to copy to', { autoClose: 1000 })

@@ -19,8 +19,7 @@ router.route('/').get((req, res) => {
 router.route('/').post(async (req, res) => {
   try {
     const { prompt } = req.body
-    console.log('prompt: ', prompt)
-    console.log('openAiKey:', process.env.OPENAI_API_KEY)
+    // console.log('prompt: ', prompt)
 
     const response = await openai.createImage(
       {

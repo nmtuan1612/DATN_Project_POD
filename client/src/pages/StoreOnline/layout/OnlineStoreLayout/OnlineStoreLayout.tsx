@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useContext, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import storeApi from 'src/apis/store.api'
 import Loading from 'src/components/Loading/Loading'
 import { AppContext } from 'src/context/app.context'
@@ -29,6 +29,12 @@ const OnlineStoreLayout = ({ children }: Props) => {
   })
 
   const store: Store = storeData?.data?.data
+
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  }, [pathname])
 
   useEffect(() => {
     if (store) {

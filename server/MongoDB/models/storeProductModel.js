@@ -46,6 +46,7 @@ const StoreProductSchema = mongoose.Schema(
     },
     customMetadata: {
       color: String,
+      rotation: [Number, Number, Number],
       logo: String,
       fullTexture: String,
       logoPrintOptions: PrintOptions,

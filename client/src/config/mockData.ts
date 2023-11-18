@@ -56,7 +56,7 @@ export const sizeGuides = {
 
 export const productMockData: Product = {
   _id: '123',
-  storeIds: ['string'],
+  storeId: 'string',
   modelMetaData: {
     _id: '1234',
     modelUrl: 'https://res.cloudinary.com/duyb3dqsr/image/upload/v1693685044/POD_Model/shirt_baked.glb',
@@ -66,15 +66,7 @@ export const productMockData: Product = {
     fullTexturePosition: [0, 0, 0],
     textureScale: 1
   },
-  category: [
-    { _id: '456', name: 'Neck Labels' },
-    { _id: '6', name: 'Crew neck' },
-    { _id: '7', name: 'Cotton' },
-    { _id: '5', name: 'Regular fit' },
-    { _id: '4', name: 'DTG' },
-    { _id: '3', name: "Kids' Clothing" },
-    { _id: '2', name: 'T-shirts' }
-  ],
+  categoryIds: ['456', '6', '7', '5', '4', '3', '2'],
   name: "Men's sport tee",
   details: [
     'Medium fabric (5.3 oz/yd² (180 g/m²))',
@@ -101,6 +93,7 @@ export const productMockData: Product = {
     'https://images.printify.com/api/catalog/643cfeabe95f9578ab0f3f53.jpg?s=432',
     'https://images.printify.com/api/catalog/643cfeaec77fc5bffd0a8857.jpg?s=432'
   ],
+  sizeGuides: sizeGuides,
   createdAt: 'string',
   updatedAt: 'string'
 }
@@ -168,6 +161,43 @@ export const bottleSizes = {
         { from: '73', to: '' },
         { from: '90', to: '' }
       ]
+    }
+  ]
+}
+
+export const bagSizes = {
+  sizes: ['24"x13"'],
+  types: [
+    {
+      name: 'Height',
+      units: 'length',
+      ranges: [{ from: '61.0', to: '' }]
+    },
+    {
+      name: 'Width',
+      units: 'length',
+      ranges: [{ from: '29.0', to: '' }]
+    }
+  ]
+}
+
+export const mousePadSizes = {
+  sizes: ['7"x8.6"'],
+  types: [
+    {
+      name: 'Height',
+      units: 'length',
+      ranges: [{ from: '18.0', to: '' }]
+    },
+    {
+      name: 'Width',
+      units: 'length',
+      ranges: [{ from: '22.0', to: '' }]
+    },
+    {
+      name: 'Thickness',
+      units: 'length',
+      ranges: [{ from: '0.3', to: '' }]
     }
   ]
 }

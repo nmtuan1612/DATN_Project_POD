@@ -4,7 +4,7 @@ import productApi from 'src/apis/product.api'
 import { CustomButton } from 'src/components'
 import Input from 'src/components/Input'
 import { AccessoriesTypes, ClothingTypes, HomeAndLivingTypes } from 'src/config/constants'
-import { bottleSizes, dressSizeGuides, sizeGuides } from 'src/config/mockData'
+import { bagSizes, bottleSizes, dressSizeGuides, mousePadSizes, sizeGuides } from 'src/config/mockData'
 import { Categories } from 'src/config/constants'
 
 type Props = {}
@@ -24,13 +24,18 @@ const AddSample = (props: Props) => {
       details: data.details.split(', '),
       otherImages: data.otherImages.split(', '),
       // type: types.filter((item) => item._id === data.type)[0]._id,
-      sizeGuides: sizeGuides,
+      // sizeGuides: sizeGuides,
+      sizeGuides: mousePadSizes,
       price: Number(data.price)
       // sizeGuides: dressSizeGuides
       //   sizeGuides: bottleSizes
     }
     await productApi.addSample(product)
   })
+
+  const updateMeshes = async () => {
+    await productApi.updateSample({})
+  }
 
   return (
     <div className='container overflow-scroll py-4 md:py-6'>
@@ -170,6 +175,7 @@ const AddSample = (props: Props) => {
           />
         </div>
         <CustomButton title='Submit' type='filled' isSubmitButton={true} />
+        {/* <CustomButton title='Update meshes' type='filled' isSubmitButton={false} handleClick={updateMeshes} /> */}
       </form>
     </div>
   )

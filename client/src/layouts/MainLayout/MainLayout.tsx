@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import UserChats from 'src/pages/User/pages/UserChats/UserChats'
 import Header from '../../components/Header/Header'
 import classNames from 'classnames'
@@ -15,6 +15,10 @@ type Props = {
 const MainLayout = ({ children }: Props) => {
   const { pathname } = useLocation()
   const queryConfig = useQueryConfig()
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  }, [pathname])
 
   return (
     <div className='app relative transition-all ease-in'>

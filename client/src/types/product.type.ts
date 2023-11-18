@@ -6,6 +6,7 @@ type modelMetaData = {
   _id: string
   modelUrl: string
   groupScale?: number
+  rotation?: [number, number, number]
   logoPosition?: [number, number, number]
   logoScale?: number
   fullTexturePosition?: [number, number, number]
@@ -42,6 +43,7 @@ export interface Product {
   modelId?: string
   customMetadata?: {
     color: string
+    rotation?: [number, number, number]
     logo: string
     fullTexture: string
     logoPrintOptions: PrintOptions

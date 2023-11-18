@@ -6,6 +6,7 @@ const ThreeDSchema = {
     required: true
   },
   groupScale: Number,
+  rotation: [Number, Number, Number],
   logoPosition: [Number, Number, Number],
   logoScale: Number,
   fullTexturePosition: [Number, Number, Number],

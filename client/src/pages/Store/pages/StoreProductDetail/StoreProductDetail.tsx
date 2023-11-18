@@ -28,6 +28,7 @@ const StoreProductDetail = (props: Props) => {
 
   const [dirty, setDirty] = useState(false)
   const [selectedVariants, setSelectedVariants] = useState<string[]>([])
+  const [variants, setVariants] = useState<ProductVariant[] | undefined>(undefined)
 
   const { productId } = useParams()
   // const product: Product = productMockData
@@ -51,7 +52,7 @@ const StoreProductDetail = (props: Props) => {
     control,
     watch
   } = useForm<ProductSchema>({
-    defaultValues: { storeIds: [currentStore?._id] },
+    defaultValues: { storeIds: [currentStore?._id], status: ['unpublished'] },
     resolver: yupResolver<ProductSchema>(productSchema)
   })
 
@@ -68,7 +69,7 @@ const StoreProductDetail = (props: Props) => {
       setValue('description', product.description)
       // setValue('details', convertDetailToHtml())
       setValue('details', product.details[0])
-      setValue('storeIds', product.storeIds)
+      setValue('status', [product.status])
 
       const listIds =
         product.variants?.reduce(
@@ -76,6 +77,7 @@ const StoreProductDetail = (props: Props) => {
           []
         ) || []
       setSelectedVariants(listIds)
+      setVariants(product.variants)
     }
   }, [product])
 
@@ -87,7 +89,7 @@ const StoreProductDetail = (props: Props) => {
 
   useEffect(() => {
     if (product) {
-      ;(!isEqual(storeIds, product.storeIds) || name !== product.name) && setDirty(true)
+      ;(!isEqual(storeIds, product.storeId) || name !== product.name) && setDirty(true)
     }
   }, [storeIds, name])
 
@@ -100,21 +102,53 @@ const StoreProductDetail = (props: Props) => {
   }
 
   const onSave = handleSubmit(async (data) => {
-    // console.log({ ...product, ...data })
     // reverseHtmlToDetail(data.details as string)
-    const { variants: variantsData, ...otherDetails } = product
+    const { _id, variants: variantsData, storeId: store, ...otherDetails } = product
 
-    if (variantsData?.length) {
-      const variants: ProductVariant[] = variantsData.map((variant, index) =>
+    if (variants?.length) {
+      const newVariants: ProductVariant[] = variants.map((variant, index) =>
         selectedVariants.includes(variant._id) ? { ...variant, isPublished: true } : { ...variant, isPublished: false }
       )
-      await productApi.updateProductVariants({ variants })
+      await productApi.updateProductVariants({ variants: newVariants })
+    }
+
+    if (routeState && routeState.productType === 'newProduct') {
+      for (const storeId of data.storeIds.filter((id) => id !== _id)) {
+        const newProduct = await productApi.addStoreProduct({
+          ...otherDetails,
+          ...data,
+          status: data.status?.[0],
+          storeId,
+          details: [data.details],
+          variants: []
+        })
+        const productId = newProduct?.data?.data?._id
+        if (productId) {
+          const newVariants = variants
+            ? variants.map((variant) => {
+                return {
+                  ...variant,
+                  productId,
+                  sku: `${_id}-${variant.size}`
+                }
+              })
+            : generateProductVariants({
+                _id: productId,
+                price: product.price,
+                sizeGuides: product.sizeGuides,
+                printAreas: product.printAreas
+              })
+          await productApi.addProductVariants({ variants: newVariants })
+        }
+      }
     }
 
     storeProductMutation.mutateAsync(
       {
         ...otherDetails,
         ...data,
+        status: data.status?.[0],
+        storeId: store._id,
         details: [data.details],
         variants: selectedVariants
       },
@@ -340,15 +374,31 @@ const StoreProductDetail = (props: Props) => {
             <div className='mb-6 rounded-lg px-6'>
               <h3 className='mb-5 block text-xl font-semibold text-gray-600'>Variants</h3>
               <div className='mb-1'>
+                <h3 className='mb-4 flex  items-center gap-2 text-sm italic text-gray-500'>
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    viewBox='0 0 20 20'
+                    fill='currentColor'
+                    className='h-5 w-5 text-primary'
+                  >
+                    <path
+                      fillRule='evenodd'
+                      d='M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z'
+                      clipRule='evenodd'
+                    />
+                  </svg>
+                  Select product's variants for sell at online store <br />
+                </h3>
                 <label htmlFor='' className='mb-0 block font-semibold text-gray-700'>
                   Pricing
                 </label>
               </div>
-              {product.variants && (
+              {variants && (
                 <PricingTable
                   selected={selectedVariants}
                   setSelected={setSelectedVariants}
-                  variants={product.variants}
+                  variants={variants}
+                  setVariants={setVariants}
                 />
               )}
             </div>
@@ -356,31 +406,51 @@ const StoreProductDetail = (props: Props) => {
             <div className='px-6'>
               <h3 className='mb-5 block text-xl font-semibold text-gray-600'>Publishing settings</h3>
               <div className='flex flex-col gap-2'>
-                <span className='block font-medium text-gray-700'>
-                  Select store <span className='text-sm text-red-600'>*</span>
-                </span>
+                <span className='block font-medium text-gray-700'>Product visibility</span>
 
-                {storeList && (
-                  <div className='flex flex-col gap-4 pl-6'>
-                    {storeList.map((store) => (
-                      <div className='flex items-center gap-2' key={store._id}>
-                        <input
-                          id={`checkbox-${store._id}`}
-                          type='checkbox'
-                          value={store._id}
-                          {...register('storeIds')}
-                          // checked={storeIds?.includes(store._id)}
-                          className='h-4 w-4 rounded border-gray-300 bg-gray-100 checked:bg-primary focus:ring-0'
-                        />
-                        <label htmlFor={`checkbox-${store._id}`} className='text-sm font-medium text-gray-900'>
-                          {store.storeName}
-                        </label>
-                      </div>
-                    ))}
+                <div className='flex flex-col gap-4 pl-6'>
+                  <div className='flex items-center gap-2'>
+                    <input
+                      type='checkbox'
+                      id='product-visibility'
+                      value={'published'}
+                      {...register('status')}
+                      className='h-4 w-4 rounded border-gray-300 bg-gray-100 checked:bg-primary focus:ring-0'
+                    />
+                    <label htmlFor={`product-visibility`} className='text-gray-900'>
+                      Publish in store
+                    </label>
                   </div>
-                )}
-                <p className='mt-1 min-h-[1.25rem] text-sm text-red-600'>{errors.storeIds?.message}</p>
+                </div>
               </div>
+              {routeState && routeState.productType === 'newProduct' && (
+                <div className='mt-4 flex flex-col gap-2'>
+                  <span className='block font-medium text-gray-700'>
+                    Select store <span className='text-sm text-red-600'>*</span>
+                  </span>
+
+                  {storeList && (
+                    <div className='flex flex-col gap-4 pl-6'>
+                      {storeList.map((store) => (
+                        <div className='flex items-center gap-2' key={store._id}>
+                          <input
+                            id={`checkbox-${store._id}`}
+                            type='checkbox'
+                            value={store._id}
+                            {...register('storeIds')}
+                            // checked={storeIds?.includes(store._id)}
+                            className='h-4 w-4 rounded border-gray-300 bg-gray-100 checked:bg-primary focus:ring-0'
+                          />
+                          <label htmlFor={`checkbox-${store._id}`} className='text-sm font-medium text-gray-900'>
+                            {store.storeName}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <p className='mt-1 min-h-[1.25rem] text-sm text-red-600'>{errors.storeIds?.message}</p>
+                </div>
+              )}
             </div>
 
             {/* footer */}

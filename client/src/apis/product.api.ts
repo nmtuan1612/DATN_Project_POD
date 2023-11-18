@@ -5,6 +5,9 @@ const productApi = {
   addSample(body: any) {
     return http.post('/product/new-sample', body)
   },
+  updateSample(body: any) {
+    return http.put('/product/new-sample', body)
+  },
   getListSampleProducts(params: ProductListConfig) {
     return http.get('/product/sample', { params })
   },

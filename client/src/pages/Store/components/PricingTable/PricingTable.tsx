@@ -1,19 +1,32 @@
+import classNames from 'classnames'
 import { isEqual } from 'lodash'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Tooltip from 'src/components/Tooltip/Tooltip'
 import { Product, ProductVariant } from 'src/types/product.type'
 
 type PricingTableProps = {
   variants: ProductVariant[]
   selected: string[]
+  setVariants: React.Dispatch<React.SetStateAction<ProductVariant[] | undefined>>
   setSelected: React.Dispatch<React.SetStateAction<string[]>>
 }
 
-const PricingTable = ({ selected, setSelected, variants }: PricingTableProps) => {
+type EditField = {
+  variantId: string
+  name: 'retailPrice' | 'profit' | 'profitMargin'
+  value: number
+}
+
+const PricingTable = ({ selected, setSelected, variants, setVariants }: PricingTableProps) => {
+  const [editField, setEditField] = useState<EditField | null>(null)
+
   const isSelectedAll = isEqual(
     selected,
     variants.map((variant) => variant._id)
   )
+
+  // console.log(editField)
+  // console.log(variants)
 
   const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
@@ -23,6 +36,59 @@ const PricingTable = ({ selected, setSelected, variants }: PricingTableProps) =>
 
   const handleSelectProduct = (id: string) => {
     setSelected((prev) => (prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]))
+  }
+
+  const onFieldChange = (e: any) => {
+    if (editField) {
+      const fieldValue = Number(e.target.value) || 0
+
+      setEditField({ ...editField, value: editField.name === 'profitMargin' ? e.target.value : fieldValue })
+      setVariants(
+        (prev) =>
+          prev?.map((variant: ProductVariant) => {
+            if (editField?.variantId === variant._id) {
+              switch (editField.name) {
+                case 'profit':
+                  return {
+                    ...variant,
+                    profit: Number(fieldValue.toFixed(2)),
+                    retailPrice: Number((variant.productionCost + fieldValue).toFixed(2)),
+                    profitMargin: Number((fieldValue / variant.productionCost).toFixed(2))
+                  }
+                case 'retailPrice':
+                  return {
+                    ...variant,
+                    retailPrice: Number(fieldValue.toFixed(2)),
+                    profit: Number((fieldValue - variant.productionCost).toFixed(2)),
+                    profitMargin: Number((fieldValue / variant.productionCost - 1).toFixed(2))
+                  }
+                case 'profitMargin':
+                  return {
+                    ...variant,
+                    profitMargin: Number((fieldValue / 100).toFixed(2)) || 0,
+                    profit: Number((variant.productionCost * (fieldValue / 100)).toFixed(2)),
+                    retailPrice: Number((variant.productionCost * ((fieldValue + 100) / 100)).toFixed(2))
+                  }
+              }
+            }
+            return variant
+          })
+      )
+    }
+  }
+
+  const onBlurEditField = () => {
+    // setVariants(
+    //   (prev) =>
+    //     prev?.map((variant: ProductVariant) => {
+    //       if (editField?.variantId === variant._id) {
+    //         variant[editField.name] = editField.value
+    //         // return { ...variant, }
+    //       }
+    //       return variant
+    //     })
+    // )
+    setEditField(null)
   }
 
   return (
@@ -47,7 +113,7 @@ const PricingTable = ({ selected, setSelected, variants }: PricingTableProps) =>
           </div> */}
 
           {/* Table */}
-          <div className='overflow-x-auto pt-8'>
+          <div className='overflow-x-auto pt-4'>
             <div className='relative border-l border-r shadow-md sm:rounded-lg'>
               <table className='w-full text-left text-sm text-gray-600'>
                 <thead className='bg-gray-100 text-sm capitalize text-gray-700'>
@@ -146,23 +212,127 @@ const PricingTable = ({ selected, setSelected, variants }: PricingTableProps) =>
                           />
                         </div>
                       </td>
-                      <td className='py-4 pl-2 pr-6'>{variant.size}</td>
-                      <td className='px-6 py-4'>
+                      <td className='h-[52px] border-r-2 pl-2 pr-6'>{variant.size}</td>
+                      <td className='h-[52px] px-6'>
                         <div className='w-max'>{variant.inventory}</div>
                       </td>
-                      <td className='px-6 py-4'>
-                        <div className='w-max'>USD {variant.retailPrice}</div>
+                      <td className='group h-[52px] px-6 md:min-w-[148px]'>
+                        <div
+                          className={classNames('w-max group-hover:hidden', {
+                            hidden: editField?.name === 'retailPrice' && editField?.variantId === variant._id
+                          })}
+                        >
+                          USD {variant.retailPrice}
+                        </div>
+                        <div
+                          className={classNames('group-hover:flex', {
+                            flex: editField?.name === 'retailPrice' && editField?.variantId === variant._id,
+                            hidden: editField?.name !== 'retailPrice' || editField?.variantId !== variant._id
+                          })}
+                        >
+                          <span className='rounded-e-0 inline-flex items-center rounded-s-md border border-gray-300 bg-gray-200 px-1 text-xs text-gray-900'>
+                            USD
+                          </span>
+                          <input
+                            type='number'
+                            value={
+                              editField?.name === 'retailPrice' && editField?.variantId === variant._id
+                                ? editField?.value
+                                : variant.retailPrice
+                            }
+                            placeholder={variant.retailPrice.toString()}
+                            onFocus={() =>
+                              setEditField({ variantId: variant._id, name: 'retailPrice', value: variant.retailPrice })
+                            }
+                            onChange={onFieldChange}
+                            onBlur={onBlurEditField}
+                            className='focus:ring-priborder-primary block w-full min-w-0 flex-1 rounded-none rounded-e-lg border border-gray-300 bg-gray-50 p-1 text-sm text-gray-900 focus:border-primary focus:ring-0'
+                          />
+                        </div>
                       </td>
-                      <td className='px-6 py-4'>
-                        <div className='w-max'>USD {variant.profit}</div>
+                      <td className='group h-[52px] px-6 md:min-w-[148px]'>
+                        <div
+                          className={classNames('w-max group-hover:hidden', {
+                            hidden: editField?.name === 'profit' && editField?.variantId === variant._id
+                          })}
+                        >
+                          USD {variant.profit}
+                        </div>
+                        <div
+                          className={classNames('group-hover:flex', {
+                            flex: editField?.name === 'profit' && editField?.variantId === variant._id,
+                            hidden: editField?.name !== 'profit' || editField?.variantId !== variant._id
+                          })}
+                        >
+                          <span className='rounded-e-0 inline-flex items-center rounded-s-md border border-gray-300 bg-gray-200 px-1 text-xs text-gray-900'>
+                            USD
+                          </span>
+                          <input
+                            type='number'
+                            value={
+                              editField?.name === 'profit' && editField?.variantId === variant._id
+                                ? editField?.value
+                                : variant.profit
+                            }
+                            placeholder={variant.profit.toString()}
+                            onFocus={() =>
+                              setEditField({ variantId: variant._id, name: 'profit', value: variant.profit })
+                            }
+                            onChange={onFieldChange}
+                            onBlur={onBlurEditField}
+                            className='focus:ring-priborder-primary block w-full min-w-0 flex-1 rounded-none rounded-e-lg border border-gray-300 bg-gray-50 p-1 text-sm text-gray-900 focus:border-primary focus:ring-0'
+                          />
+                        </div>
                       </td>
-                      <td className='px-6 py-4'>
-                        <div className='w-max'>{Number(variant.profitMargin) * 100} %</div>
+                      <td className='group h-[52px] px-6 md:min-w-[148px]'>
+                        <div
+                          className={classNames('w-max group-hover:hidden', {
+                            hidden: editField?.name === 'profitMargin' && editField?.variantId === variant._id
+                          })}
+                        >
+                          {Number(variant.profitMargin) * 100} %
+                        </div>
+                        <div
+                          className={classNames('group-hover:flex', {
+                            flex: editField?.name === 'profitMargin' && editField?.variantId === variant._id,
+                            hidden: editField?.name !== 'profitMargin' || editField?.variantId !== variant._id
+                          })}
+                          onClick={() =>
+                            setEditField({
+                              variantId: variant._id,
+                              name: 'profitMargin',
+                              value: Number(variant.profitMargin) * 100
+                            })
+                          }
+                        >
+                          <span className='rounded-e-0 inline-flex items-center rounded-s-md border border-gray-300 bg-gray-200 px-2 text-xs text-gray-900'>
+                            %
+                          </span>
+                          <input
+                            type='text'
+                            value={
+                              editField?.name === 'profitMargin' && editField?.variantId === variant._id
+                                ? editField?.value?.toString()
+                                : String(Number(variant.profitMargin) * 100)
+                            }
+                            placeholder={(Number(variant.profitMargin) * 100).toString()}
+                            onChange={onFieldChange}
+                            onFocus={() =>
+                              setEditField({
+                                variantId: variant._id,
+                                name: 'profitMargin',
+                                value: Number(variant.profitMargin) * 100
+                              })
+                            }
+                            onBlur={onBlurEditField}
+                            className='focus:ring-priborder-primary block w-full min-w-0 flex-1 rounded-none rounded-e-lg border border-gray-300 bg-gray-50 p-1 text-sm text-gray-900 focus:border-primary focus:ring-0'
+                          />
+                        </div>
                       </td>
-                      <td className='px-6 py-4'>
+                      <td className='h-[52px] px-6'>
                         <div className='w-max'>USD {variant.productionCost}</div>
                       </td>
-                      <td className='px-6 py-4'>
+                      <td className='h-[52px] px-6'>
                         <div className='w-max'>USD {variant.shippingCost}</div>
                       </td>
                     </tr>

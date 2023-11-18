@@ -302,16 +302,45 @@ const CustomProductForm = ({ refetch, product, productMutation, storeProductMuta
                 <input
                   id='logo-size'
                   type='range'
-                  min={0}
+                  min={1}
                   max={20}
                   // step={0.5}
-                  value={Number(snap.logoPrintOptions.scale) * 20}
+                  // value={Number(snap.logoPrintOptions.scale) * 20}
+                  defaultValue={1}
                   className='h-2 flex-1 cursor-pointer appearance-none rounded-lg bg-gray-200'
                   onChange={(e) => {
-                    state.logoPrintOptions.scale = Number(e.target.value) / 20
+                    // state.logoPrintOptions.scale = Number(e.target.value) / 20
+                    state.logoPrintOptions.scale = Number(e.target.value) * Number(product.modelMetaData.logoScale)
                   }}
                 />
-                <span className='text-base font-semibold text-primary'>{Number(snap.logoPrintOptions.scale) * 20}</span>
+                {/* <span className='text-base font-semibold text-primary'>{Number(snap.logoPrintOptions.scale) * 20}</span> */}
+                <span className='text-base font-semibold text-primary'>
+                  {Number(snap.logoPrintOptions.scale).toFixed(2)}
+                </span>
+              </div>
+            </div>
+            <div>
+              <label htmlFor='logo-size' className='mb-2 block text-sm font-medium text-gray-900'>
+                Cover texture size
+              </label>
+              <div className='flex items-center gap-4'>
+                <input
+                  id='cover-texture-size'
+                  type='range'
+                  min={1}
+                  max={10}
+                  defaultValue={1}
+                  className='h-2 flex-1 cursor-pointer appearance-none rounded-lg bg-gray-200'
+                  onChange={(e) => {
+                    // state.logoPrintOptions.scale = Number(e.target.value) / 20
+                    state.fullTexturePrintOptions.scale =
+                      Number(e.target.value) * Number(product.modelMetaData.textureScale)
+                  }}
+                />
+                {/* <span className='text-base font-semibold text-primary'>{Number(snap.logoPrintOptions.scale) * 20}</span> */}
+                <span className='text-base font-semibold text-primary'>
+                  {Number(snap.fullTexturePrintOptions.scale).toFixed(2)}
+                </span>
               </div>
             </div>
           </div>
