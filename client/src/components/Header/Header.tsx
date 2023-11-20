@@ -255,17 +255,23 @@ const Header = (props: Props) => {
                   <div className='p-4 pb-0 text-gray-900 md:pb-4'>
                     <ul className='space-y-4'>
                       <li>
-                        <Link to={AppUrls.categoryProduct('Bestsellers')} className='text-gray-500 hover:text-primary'>
+                        <Link to={AppUrls.categoryFeatured('Bestsellers')} className='text-gray-500 hover:text-primary'>
                           Bestsellers
                         </Link>
                       </li>
                       <li>
-                        <Link to={AppUrls.categoryProduct('New-Arrivals')} className='text-gray-500 hover:text-primary'>
+                        <Link
+                          to={AppUrls.categoryFeatured('New Arrivals')}
+                          className='text-gray-500 hover:text-primary'
+                        >
                           New Arrivals
                         </Link>
                       </li>
                       <li>
-                        <Link to={AppUrls.categoryProduct('Eco-friendly')} className='text-gray-500 hover:text-primary'>
+                        <Link
+                          to={AppUrls.categoryFeatured('Eco-friendly')}
+                          className='text-gray-500 hover:text-primary'
+                        >
                           Eco-friendly
                         </Link>
                       </li>

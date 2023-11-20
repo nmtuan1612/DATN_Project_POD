@@ -35,7 +35,8 @@ const FeaturedProducts = ({ title, hiddenTag }: Props) => {
         </div>
         <div className='col-span-2 flex items-center justify-end lg:col-span-1'>
           <Link
-            to={AppUrls.categoryFeatured(title.replace(' ', '-'))}
+            // to={AppUrls.categoryFeatured(title.replace(' ', '-'))}
+            to={AppUrls.categoryFeatured(title)}
             className='flex items-center gap-3 rounded-lg px-3 py-1 font-medium text-primary hover:bg-primary hover:text-white focus:outline-none md:px-3 md:py-1.5'
           >
             View All

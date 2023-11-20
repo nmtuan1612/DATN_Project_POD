@@ -7,5 +7,11 @@
 }
 
 .head-text {
-  @apply rounded-tr-lg bg-white pr-4 text-[3rem] font-bold leading-[4rem] text-gray-700 xl:text-[3.2rem] xl:leading-[3.5rem];
+  @apply rounded-tr-lg bg-white pr-4 text-[3rem] font-bold leading-[4rem] text-gray-700 text-primary xl:text-[3.2rem] xl:leading-[3.5rem];
+}
+
+.let-custom {
+  font-family: 'Pacifico', cursive;
+  transform: translateX(-50%) translateY(-50%);
+  @apply text-5xl italic text-white;
 }

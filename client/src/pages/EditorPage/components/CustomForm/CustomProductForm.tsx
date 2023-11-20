@@ -242,7 +242,8 @@ const CustomProductForm = ({ refetch, product, productMutation, storeProductMuta
   }
 
   return (
-    <motion.div key='custom' className='absolute left-4 top-6 z-10' {...slideAnimation('left')}>
+    // <motion.div key='custom' className='absolute left-4 top-6 z-10' {...slideAnimation('left')}>
+    <motion.div key='custom' className='absolute left-4 top-6 z-10'>
       <div className='flex min-h-full flex-col justify-between rounded-lg bg-white shadow-around'>
         {/* Tabs */}
         <div className='editorTabs-container h-[480px]'>

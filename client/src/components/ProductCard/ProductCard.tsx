@@ -14,7 +14,7 @@ const ProductCard = ({ productData: product }: Props) => {
 
   const generateTag = () => {
     switch (product.hiddenTag) {
-      case 'Bestseller':
+      case 'Bestsellers':
         return (
           // <div className='absolute left-4 top-4 z-10 rounded-sm border-[1px] border-[#b15b0d] bg-amber-100 px-2 py-0.5 text-xs text-[#b15b0d]'>
           <div className='absolute left-4 top-4 z-10 rounded-sm border-[1px] border-primary bg-purple-100 px-2 py-0.5 text-xs text-primary'>

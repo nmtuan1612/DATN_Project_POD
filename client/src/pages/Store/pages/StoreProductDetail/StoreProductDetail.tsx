@@ -242,7 +242,7 @@ const StoreProductDetail = (props: Props) => {
                     </div>
                     <div className=''>
                       <img
-                        src='https://images.printify.com/mockup/64f4e228add9bc118c06c4eb/93541/78839?s=400&t=1693770280000'
+                        src={product?.otherImages?.[product?.otherImages?.length - 1] || ''}
                         alt='thumbnail'
                         className='aspect-square w-28 overflow-hidden rounded-md border object-cover'
                       />

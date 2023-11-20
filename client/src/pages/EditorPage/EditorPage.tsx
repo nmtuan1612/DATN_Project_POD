@@ -97,14 +97,14 @@ const EditorPage = (props: Props) => {
             <span className='text-gray-400'>Print</span>
           </Link>
 
-          <motion.div className='right-5 top-5 z-10' {...fadeAnimation}>
+          <motion.div className='right-5 top-5 z-10'>
             <h3 className='text-xl font-semibold text-gray-900'>{product.name}</h3>
           </motion.div>
           <div></div>
         </div>
         {/* Content */}
         <div className='relative h-full w-full bg-blue-50'>
-          <motion.div className='absolute right-5 top-5 z-20' {...fadeAnimation}>
+          <motion.div className='absolute right-5 top-5 z-20'>
             <CustomButton
               type='filled'
               title='Go Back'
@@ -123,7 +123,7 @@ const EditorPage = (props: Props) => {
           />
 
           {product && (
-            <motion.div className='relative h-full w-full md:pl-[200px]' {...fadeAnimation}>
+            <motion.div className='relative h-full w-full md:pl-[200px]'>
               <CanvasModel product={product} />
 
               <div className='decals-container md:pl-[200px]'>
