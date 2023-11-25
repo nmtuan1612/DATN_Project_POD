@@ -10,8 +10,6 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { persistor, store } from 'src/redux/store/store'
 import ErrorBoundary from './components/ErrorBoundary'
 import { Provider } from 'react-redux'
-// import { Buffer } from 'buffer'
-
 // globalThis.Buffer = Buffer
 const queryClient = new QueryClient()
 

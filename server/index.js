@@ -15,6 +15,7 @@ import ConversationRouter from './routes/ConversationRoutes.js'
 import UploadRouter from './routes/UploadRoute.js'
 import ProductRouter from './routes/ProductRoutes.js'
 import MessageModel from './MongoDB/models/messageModel.js'
+import StripeRouter from './routes/Stripe.routes.js'
 
 dotenv.config()
 
@@ -34,6 +35,7 @@ app.use(express.json({ limit: '50mb' }))
 
 app.use('/api/v1', AuthRouter)
 app.use('/api/v1/dalle', dalleRoutes)
+app.use('/api/v1/stripe', StripeRouter)
 app.use('/api/v1/user', UserRouter)
 app.use('/api/v1/shop', StoreRouter)
 app.use('/api/v1/category', CategoryRouter)

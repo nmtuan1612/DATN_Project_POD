@@ -115,6 +115,26 @@ const StoreOnlineCheckout = (props: Props) => {
     })
   }
 
+  const handleCheckout = async () => {
+    const products = productsList.map((product) => ({
+      ...product,
+      quantity: getQuantity(product._id)
+    }))
+    const { data } = await orderApi.checkoutStripe(
+      JSON.stringify({
+        items: [
+          ...products,
+          {
+            productId: { name: 'Shipping fee' },
+            retailPrice: SHIPPING__FEE,
+            quantity: 1
+          }
+        ]
+      })
+    )
+    window.open(data.url, '_blank')
+  }
+
   return (
     <div className='h-full'>
       <h3 className='text-2xl font-semibold text-gray-800'>Checkout</h3>
@@ -428,7 +448,7 @@ const StoreOnlineCheckout = (props: Props) => {
                       type='filled'
                       title='Place Order'
                       isSubmitButton={false}
-                      handleClick={handleCreateOrder}
+                      handleClick={handleCheckout}
                     />
                   </div>
                 )}
