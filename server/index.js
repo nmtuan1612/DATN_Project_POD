@@ -5,16 +5,16 @@ import bodyParser from 'body-parser'
 import { Server } from 'socket.io'
 import http from 'http'
 
+import connectDB from './MongoDB/connect.js'
+import MessageModel from './MongoDB/models/messageModel.js'
 import dalleRoutes from './routes/dalle.routes.js'
 import UserRouter from './routes/UserRoutes.js'
-import connectDB from './MongoDB/connect.js'
 import StoreRouter from './routes/StoreRoutes.js'
 import AuthRouter from './routes/AuthRoutes.js'
 import CategoryRouter from './routes/CategoryRoutes.js'
 import ConversationRouter from './routes/ConversationRoutes.js'
 import UploadRouter from './routes/UploadRoute.js'
 import ProductRouter from './routes/ProductRoutes.js'
-import MessageModel from './MongoDB/models/messageModel.js'
 import StripeRouter from './routes/Stripe.routes.js'
 
 dotenv.config()
@@ -50,7 +50,6 @@ app.get('/', (req, res) => {
 const connectServerToDB = async () => {
   try {
     connectDB(process.env.MONGO_URL)
-    // app.listen(8080, () => console.log('Server has started on port 8080'))
   } catch (error) {
     console.log('error:', error)
   }

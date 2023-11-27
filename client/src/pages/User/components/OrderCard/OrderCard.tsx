@@ -8,7 +8,7 @@ import { CustomButton } from 'src/components'
 import ChatButton from 'src/components/Messenger/components/ChatButton/ChatButton'
 import Tooltip from 'src/components/Tooltip/Tooltip'
 import { AppUrls } from 'src/config/config'
-import { OrderStatus } from 'src/config/constants'
+import { OrderStatus, SHIPPING__FEE } from 'src/config/constants'
 import { Order, OrderDetail, OrderItem, UserOrderDetail } from 'src/types/order.type'
 import { Product } from 'src/types/product.type'
 import { isAxiosError } from 'src/utils/utils'
@@ -106,7 +106,7 @@ const OrderCard = ({ order, selected, refetch, setListIds, handleSelectProduct }
         {order.status === OrderStatus[3].id && <CustomButton type='filled' title='Rate' />}
         <div className='flex items-center gap-4'>
           <h4 className='text-gray-800'>Order Total:</h4>
-          <h2 className='text-2xl font-normal tracking-wide text-primary'>${order.totalBill}</h2>
+          <h2 className='text-2xl font-normal tracking-wide text-primary'>${order.totalBill + SHIPPING__FEE}</h2>
         </div>
       </div>
     </div>

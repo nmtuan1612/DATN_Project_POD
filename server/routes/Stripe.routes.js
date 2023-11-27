@@ -5,7 +5,8 @@ const stripe = new Stripe(
   'sk_test_51OFRMbGBgRjSDWkdBPiKXAomku7O3vxoP1diCRelA572tZfXRoVMyEOFXEsNHhkL3WxCfW9NNMBNoGXqM2Wu5img00kZGfugvw'
 )
 
-const CLIENT_URL = 'http://localhost:5173'
+// const CLIENT_URL = 'http://localhost:5173'
+const CLIENT_URL = 'https://creoprint.netlify.app'
 
 const StripeRouter = express.Router()
 StripeRouter.post('/create-checkout-session', async (req, res) => {
@@ -28,7 +29,7 @@ StripeRouter.post('/create-checkout-session', async (req, res) => {
       success_url: `${CLIENT_URL}/user/my-orders`,
       cancel_url: `${CLIENT_URL}/shop-online/checkout`
     })
-    // console.log(req.body.items)
+
     res.status(200).json({ url: session.url })
   } catch (error) {
     res.status(500).json(error)

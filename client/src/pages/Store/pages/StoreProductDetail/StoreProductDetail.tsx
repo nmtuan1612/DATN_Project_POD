@@ -113,7 +113,7 @@ const StoreProductDetail = (props: Props) => {
     }
 
     if (routeState && routeState.productType === 'newProduct') {
-      for (const storeId of data.storeIds.filter((id) => id !== _id)) {
+      for (const storeId of data.storeIds.filter((id) => id !== store._id)) {
         const newProduct = await productApi.addStoreProduct({
           ...otherDetails,
           ...data,
