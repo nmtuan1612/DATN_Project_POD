@@ -1,5 +1,5 @@
 import express from 'express'
-import { getUser, updateUser, getAllUserStore } from '../MongoDB/controllers/UserController.js'
+import { getUser, updateUser, getAllUserStore, resetPassword } from '../MongoDB/controllers/UserController.js'
 import tokenMiddleWare from '../MiddleWare/VerifyAccessToken.js'
 import { getUserOrderById, getUserOrders } from '../MongoDB/controllers/OrderController.js'
 
@@ -9,5 +9,6 @@ UserRouter.get('/my-stores', getAllUserStore, tokenMiddleWare)
 UserRouter.get('/my-orders', getUserOrders, tokenMiddleWare)
 UserRouter.get('/my-orders/:orderId', getUserOrderById, tokenMiddleWare)
 UserRouter.put('/', updateUser, tokenMiddleWare)
+UserRouter.put('/reset-password', resetPassword)
 
 export default UserRouter

@@ -31,7 +31,7 @@ const AccountSetting = (props: Props) => {
     queryFn: () => userApi.getUser({ id: profile?._id || '' }),
     staleTime: 2 * (60 * 1000)
   })
-  const updateAccountMutation = useMutation(userApi.updateAccount)
+  const updateAccountMutation = useMutation(userApi.resetPassword)
 
   const profileData: User = user?.data
 
@@ -52,6 +52,7 @@ const AccountSetting = (props: Props) => {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const updateData = {
+        email: profile?.email,
         password: data.password
       }
 

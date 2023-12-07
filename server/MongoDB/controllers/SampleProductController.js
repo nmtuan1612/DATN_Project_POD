@@ -51,18 +51,30 @@ export const getListSampleProducts = async (req, res) => {
 }
 
 export const searchSampleProducts = async (req, res) => {
-  const { page, limit, typeIds, searchKey } = req.query
+  const { page, limit, typeIds, searchKey, sortBy } = req.query
   // console.log(req.query)
   try {
+    let products = []
+    const queryObj = {}
     if (searchKey) {
-      const products = await SampleProductModel.find({
-        typeId: typeIds ? { $in: typeIds.split(',') } : { $exists: true },
-        name: { $regex: searchKey, $options: 'i' }
-      })
-      res.status(200).json({ data: products })
-    } else {
-      res.status(200).json({ data: [] })
+      queryObj.typeId = typeIds ? { $in: typeIds.split(',') } : { $exists: true }
+      queryObj.name = { $regex: searchKey, $options: 'i' }
+      switch (sortBy) {
+        case 'popularity':
+          products = await SampleProductModel.find(queryObj)
+          break
+        case 'low_to_high':
+          products = await SampleProductModel.find(queryObj).sort({ price: 1 })
+          break
+        case 'high_to_low':
+          products = await SampleProductModel.find(queryObj).sort({ price: -1 })
+          break
+        default:
+          products = await SampleProductModel.find(queryObj)
+          break
+      }
     }
+    res.status(200).json({ data: products })
   } catch (error) {
     res.status(500).json(error)
   }

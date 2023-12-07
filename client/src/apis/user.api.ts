@@ -16,6 +16,9 @@ const userApi = {
   },
   getUserOrderDetail(orderId: string) {
     return http.get(AppUrls.userOrderDetail(orderId))
+  },
+  resetPassword(body: any) {
+    return http.put(`${path.user}/reset-password`, body)
   }
 }
 

@@ -16,6 +16,9 @@ const commonApi = {
   getSampleProductType: async (category: string) => {
     const data = await http.get('/product/sample-types', { params: { category } })
     return data.status === 200 ? data.data.data : []
+  },
+  sendRecoveryEmail(body: any) {
+    return http.post('/email/send_recovery_email', body)
   }
 }
 

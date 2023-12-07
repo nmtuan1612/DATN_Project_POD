@@ -160,7 +160,9 @@ const Login = (props: Props) => {
                 Sign up
               </Link>
             </div>
-            <span className='text-sm text-primary'>Forgot password?</span>
+            <Link to={path.forgotPassword} className='text-sm text-primary'>
+              Forgot password?
+            </Link>
           </div>
         </form>
       </div>

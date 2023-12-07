@@ -14,6 +14,8 @@ interface AppContextInterface {
   setCurrentStore: React.Dispatch<React.SetStateAction<Store | null>>
   chatMetaData: ConversationMetaData
   setChatMetaData: React.Dispatch<React.SetStateAction<ConversationMetaData>>
+  otp: number
+  setOtp: React.Dispatch<React.SetStateAction<number>>
   //   extendedPurchases: ExtendedPurchase[]
   //   setExtendedPurchases: React.Dispatch<React.SetStateAction<ExtendedPurchase[]>>
   reset: () => void
@@ -28,6 +30,8 @@ const initialAppContext: AppContextInterface = {
   setCurrentStore: () => null,
   chatMetaData: { chatID: '', otherUserId: '' },
   setChatMetaData: () => null,
+  otp: 0,
+  setOtp: () => null,
   //   extendedPurchases: [],
   //   setExtendedPurchases: () => null,
   reset: () => null
@@ -41,6 +45,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [profile, setProfile] = useState<User | null>(initialAppContext.profile)
   const [currentStore, setCurrentStore] = useState<Store | null>(initialAppContext.currentStore)
   const [chatMetaData, setChatMetaData] = useState<ConversationMetaData>(initialAppContext.chatMetaData)
+  const [otp, setOtp] = useState<number>(0)
 
   const reset = () => {
     setIsAuthenticated(false)
@@ -59,6 +64,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setCurrentStore,
         chatMetaData,
         setChatMetaData,
+        otp,
+        setOtp,
         // extendedPurchases,
         // setExtendedPurchases,
         reset

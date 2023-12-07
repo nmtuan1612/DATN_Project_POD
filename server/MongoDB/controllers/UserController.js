@@ -1,6 +1,7 @@
 import UserModel from '../models/userModel.js'
 import StoreModel from '../models/storeModel.js'
 import mongoose from 'mongoose'
+import bcrypt from 'bcrypt'
 
 export const getUser = async (req, res) => {
   const id = req.query.id
@@ -28,6 +29,22 @@ export const updateUser = async (req, res) => {
     if (user) {
       const { password, ...otherDetails } = user._doc
       res.status(200).json({ data: otherDetails, message: 'User updated successfully!' })
+    } else {
+      res.status(404).json('Update user failed!')
+    }
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
+
+export const resetPassword = async (req, res) => {
+  try {
+    const user = await UserModel.findOne({ email: req.body.email })
+    if (user) {
+      const salt = await bcrypt.genSalt(10)
+      const hashedPassword = await bcrypt.hash(req.body.password, salt)
+      await UserModel.findOneAndUpdate({ email: req.body.email }, { password: hashedPassword }, { new: true })
+      res.status(200).send('Password updated successfully!')
     } else {
       res.status(404).json('Update user failed!')
     }

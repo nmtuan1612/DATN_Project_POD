@@ -11,6 +11,7 @@ import AddSample from './pages/AddSample/AddSample'
 import FeaturedPage from './pages/FeaturedPage/FeaturedPage'
 import OnlineStoreLayout from './pages/StoreOnline/layout/OnlineStoreLayout/OnlineStoreLayout'
 import UserCartWrapper from './components/UserCartWrapper/UserCartWrapper'
+import ResetPasswordLayout from './layouts/ResetPasswordLayout/ResetPasswordLayout'
 
 const CreateStore = lazy(() => import('./pages/Store/pages/CreateStore/CreateStore'))
 const StoreOnline = lazy(() => import('./pages/StoreOnline/pages/StoreOnline'))
@@ -40,6 +41,9 @@ const NotFound = lazy(() => import('./pages/NotFoundPage'))
 const ProductDetail = lazy(() => import('./pages/ProductDetail/ProductDetail'))
 const Register = lazy(() => import('./pages/Register/Register'))
 const Login = lazy(() => import('./pages/Login/Login'))
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword/ForgotPassword'))
+const ResetPassword = lazy(() => import('./pages/ForgotPassword/ResetPassword'))
+
 const ErrorPage = lazy(() => import('./pages/ErrorPage/ErrorPage'))
 
 function ProtectedRoute() {
@@ -76,6 +80,26 @@ const useRouterElements = () => {
                 <Register />
               </Suspense>
             </AuthLayout>
+          )
+        },
+        {
+          path: path.forgotPassword,
+          element: (
+            <ResetPasswordLayout>
+              <Suspense>
+                <ForgotPassword />
+              </Suspense>
+            </ResetPasswordLayout>
+          )
+        },
+        {
+          path: path.resetPassword,
+          element: (
+            <ResetPasswordLayout>
+              <Suspense>
+                <ResetPassword />
+              </Suspense>
+            </ResetPasswordLayout>
           )
         }
       ]
