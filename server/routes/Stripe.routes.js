@@ -5,8 +5,8 @@ const stripe = new Stripe(
   'sk_test_51OFRMbGBgRjSDWkdBPiKXAomku7O3vxoP1diCRelA572tZfXRoVMyEOFXEsNHhkL3WxCfW9NNMBNoGXqM2Wu5img00kZGfugvw'
 )
 
-// const CLIENT_URL = 'http://localhost:5173'
-const CLIENT_URL = 'https://creoprint.netlify.app'
+const CLIENT_URL = 'http://localhost:5173'
+// const CLIENT_URL = 'https://creoprint.netlify.app'
 
 const StripeRouter = express.Router()
 StripeRouter.post('/create-checkout-session', async (req, res) => {

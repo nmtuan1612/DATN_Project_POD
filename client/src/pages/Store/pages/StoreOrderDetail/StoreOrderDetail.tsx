@@ -1,25 +1,29 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import moment from 'moment'
 import React, { useEffect, useMemo } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import storeApi from 'src/apis/store.api'
 import { CustomButton } from 'src/components'
 import Loading from 'src/components/Loading/Loading'
 import OrderStatusBar from 'src/components/OrderStatusBar/OrderStatusBar'
 import { AppUrls } from 'src/config/config'
 import { Order, OrderDetail, OrderItem } from 'src/types/order.type'
+import { isAxiosError } from 'src/utils/utils'
 
 type Props = {}
 
 const StoreOrderDetail = (props: Props) => {
   const { shopId, orderId } = useParams()
 
-  const { data, isLoading } = useQuery({
+  const { data, refetch, isLoading } = useQuery({
     queryKey: ['order_detail', orderId],
     queryFn: () => storeApi.getOrderDetail(shopId as string, orderId as string),
     staleTime: 20 * 1000
   })
   const order: OrderDetail = data?.data?.data
+
+  const orderMutation = useMutation({ mutationFn: storeApi.updateOrderStatus })
 
   const productionCost = useMemo(
     () =>
@@ -32,6 +36,23 @@ const StoreOrderDetail = (props: Props) => {
         : 0,
     [order]
   )
+
+  const handleCancel = async () => {
+    orderMutation.mutateAsync(
+      { orderId: order?._id, status: 'cancelled' },
+      {
+        onSuccess(data) {
+          toast.error('Order cancelled', { autoClose: 1000 })
+          refetch()
+        },
+        onError(error) {
+          if (isAxiosError(error)) {
+            toast.error((error.response?.data as string) || '')
+          }
+        }
+      }
+    )
+  }
 
   return (
     <div className='flex flex-col gap-4'>
@@ -58,25 +79,29 @@ const StoreOrderDetail = (props: Props) => {
               <h3 className='text-xl font-semibold'>{`#${order._id}`}</h3>
               <p className='text-sm text-gray-500'>Created {moment(order.createdAt).format('lll')}</p>
             </div>
-
-            <div className='flex items-center gap-4'>
-              <button className='flex items-center gap-3 rounded-lg px-3 py-1 font-medium text-red-500 hover:bg-gray-200 focus:outline-none md:py-1.5'>
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  viewBox='0 0 24 24'
-                  fill='currentColor'
-                  className='h-[22px] w-[22px]'
+            {order.status !== 'cancelled' && (
+              <div className='flex items-center gap-4'>
+                <button
+                  className='flex items-center gap-3 rounded-lg px-3 py-1 font-medium text-red-500 hover:bg-gray-200 focus:outline-none md:py-1.5'
+                  onClick={handleCancel}
                 >
-                  <path
-                    fillRule='evenodd'
-                    d='M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z'
-                    clipRule='evenodd'
-                  />
-                </svg>
-                Cancel order
-              </button>
-              <CustomButton type='filled' title='Submit' />
-            </div>
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    viewBox='0 0 24 24'
+                    fill='currentColor'
+                    className='h-[22px] w-[22px]'
+                  >
+                    <path
+                      fillRule='evenodd'
+                      d='M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z'
+                      clipRule='evenodd'
+                    />
+                  </svg>
+                  Cancel order
+                </button>
+                <CustomButton type='filled' title='Submit' />
+              </div>
+            )}
           </div>
 
           {/* Status */}

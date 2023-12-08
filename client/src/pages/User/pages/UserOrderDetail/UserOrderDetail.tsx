@@ -1,7 +1,9 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import classNames from 'classnames'
 import moment from 'moment'
 import { Link, useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import storeApi from 'src/apis/store.api'
 import userApi from 'src/apis/user.api'
 import { CustomButton } from 'src/components'
 import Loading from 'src/components/Loading/Loading'
@@ -11,18 +13,39 @@ import OrderTracking from 'src/components/OrderTracking/OrderTracking'
 import { AppUrls } from 'src/config/config'
 import { OrderStatus } from 'src/config/constants'
 import { OrderDetail, OrderItem } from 'src/types/order.type'
+import { isAxiosError } from 'src/utils/utils'
 
 type Props = {}
 
 const UserOrderDetail = (props: Props) => {
   const { orderId } = useParams()
 
-  const { data, isLoading } = useQuery({
+  const { data, refetch, isLoading } = useQuery({
     queryKey: ['user_order_detail', orderId],
     queryFn: () => userApi.getUserOrderDetail(orderId as string),
     staleTime: 20 * 1000
   })
   const order: OrderDetail = data?.data?.data
+
+  const orderMutation = useMutation({ mutationFn: (body: any) => storeApi.updateOrderStatus(body) })
+
+  const handleCancel = async () => {
+    // console.log('alo')
+    await orderMutation.mutateAsync(
+      { orderId: order?._id, status: 'cancelled' },
+      {
+        onSuccess(data) {
+          toast.error('Order cancelled', { autoClose: 1000 })
+          refetch()
+        },
+        onError(error) {
+          if (isAxiosError(error)) {
+            toast.error((error.response?.data as string) || '')
+          }
+        }
+      }
+    )
+  }
 
   return (
     <div className='flex flex-col gap-4'>
@@ -61,7 +84,9 @@ const UserOrderDetail = (props: Props) => {
               </div>
 
               <div className='my-4 flex justify-end gap-2'>
-                {order.status === OrderStatus[0].id && <CustomButton type='danger' title='Cancel order' />}
+                {order.status === OrderStatus[0].id && (
+                  <CustomButton type='danger' title='Cancel order' handleClick={handleCancel} />
+                )}
                 {/* {order.status === OrderStatus[1].id ||
                   (order.status === OrderStatus[2].id && <CustomButton type='outline' title='Contact seller' />)} */}
                 {order.status === OrderStatus[3].id && <CustomButton type='filled' title='Rate' />}

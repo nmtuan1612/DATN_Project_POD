@@ -35,14 +35,31 @@ export const getListSampleProducts = async (req, res) => {
   try {
     let products = []
     // if (Object.keys(otherQueries).length) {
-    const { typeIds, hiddenTag } = otherQueries
+    const { typeIds, hiddenTag, sortBy } = otherQueries
+    let queryObj = { categoryIds: categoryId }
     if (typeIds) {
-      products = await SampleProductModel.find({ categoryIds: categoryId, typeId: { $in: typeIds.split(',') } })
+      queryObj.typeId = { $in: typeIds.split(',') }
       // }
-    } else if (hiddenTag) {
-      products = await SampleProductModel.find({ hiddenTag })
-    } else {
-      products = await SampleProductModel.find({ categoryIds: categoryId })
+    }
+    if (hiddenTag) {
+      queryObj = { hiddenTag }
+    }
+    // else {
+    //   products = await SampleProductModel.find({ categoryIds: categoryId })
+    // }
+    switch (sortBy) {
+      case 'popularity':
+        products = await SampleProductModel.find(queryObj)
+        break
+      case 'low_to_high':
+        products = await SampleProductModel.find(queryObj).sort({ price: 1 })
+        break
+      case 'high_to_low':
+        products = await SampleProductModel.find(queryObj).sort({ price: -1 })
+        break
+      default:
+        products = await SampleProductModel.find(queryObj)
+        break
     }
     res.status(200).json({ data: products })
   } catch (error) {

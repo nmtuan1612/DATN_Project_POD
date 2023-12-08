@@ -156,7 +156,7 @@ const StoreProductCard = ({
           </div>
         </Tooltip>
         {/* Create order btn */}
-        <Tooltip content='Create order' classStyle='z-10'>
+        {/* <Tooltip content='Create order' classStyle='z-10'>
           <div className='cursor-pointer rounded-lg p-1 hover:bg-gray-200'>
             <svg
               xmlns='http://www.w3.org/2000/svg'
@@ -173,7 +173,7 @@ const StoreProductCard = ({
               />
             </svg>
           </div>
-        </Tooltip>
+        </Tooltip> */}
         {/* Delete btn */}
         <div
           className='z-10 cursor-pointer rounded-lg p-1 text-red-500 hover:bg-gray-200'

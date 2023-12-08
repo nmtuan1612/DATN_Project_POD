@@ -201,7 +201,7 @@ const CustomProductForm = ({ refetch, product, productMutation, storeProductMuta
         await storeProductMutation.mutateAsync(data, {
           onSuccess(data) {
             navigate(AppUrls.shopProductDetail(productId as string))
-            refetch()
+            // refetch()
           },
           onError(error) {
             if (isAxiosError(error)) {

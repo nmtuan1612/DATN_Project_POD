@@ -36,6 +36,9 @@ const storeApi = {
   },
   getOrderDetail(storeId: string, orderId: string) {
     return http.get(`${path.shop}/${storeId}/orders/${orderId}`)
+  },
+  updateOrderStatus(body: any) {
+    return http.put('/shop/orders', body)
   }
 
   // getPublishProductsOfOnlineStore(storeId: string, params: ProductListConfig) {

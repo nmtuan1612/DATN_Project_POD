@@ -133,6 +133,7 @@ const StoreOnlineCheckout = (props: Props) => {
       })
     )
     window.open(data.url, '_blank')
+    handleCreateOrder()
   }
 
   return (

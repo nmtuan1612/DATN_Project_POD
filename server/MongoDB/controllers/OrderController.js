@@ -99,3 +99,19 @@ export const getUserOrderById = async (req, res) => {
     res.status(500).json(error)
   }
 }
+
+export const updateOrderStatus = async (req, res) => {
+  console.log(req.body)
+  const { orderId, status } = req.body
+  try {
+    const order = await OrderModel.findById(orderId)
+    if (order) {
+      await OrderModel.findByIdAndUpdate(orderId, { status }, { new: true })
+      return res.status(200).json({ message: 'Order updated' })
+    } else {
+      res.status(404).json('Order not found')
+    }
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}

@@ -126,8 +126,9 @@ const StoreProductDetail = (props: Props) => {
         if (productId) {
           const newVariants = variants
             ? variants.map((variant) => {
+                const { _id, ...otherDetails } = variant
                 return {
-                  ...variant,
+                  ...otherDetails,
                   productId,
                   sku: `${_id}-${variant.size}`
                 }

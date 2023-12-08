@@ -105,10 +105,7 @@ const ManageMyOrders = (props: Props) => {
           <ul className='mt-8 flex flex-col gap-0'>
             {ordersList.map((order: UserOrderDetail) => (
               // product item
-              <li
-                // to={AppUrls.shopProductDetail(product._id)}
-                key={order._id}
-              >
+              <li className='mb-2' key={order._id}>
                 <OrderCard
                   order={order}
                   selected={selected}

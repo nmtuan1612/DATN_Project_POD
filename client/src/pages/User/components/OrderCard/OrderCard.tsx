@@ -4,6 +4,7 @@ import React from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import productApi from 'src/apis/product.api'
+import storeApi from 'src/apis/store.api'
 import { CustomButton } from 'src/components'
 import ChatButton from 'src/components/Messenger/components/ChatButton/ChatButton'
 import Tooltip from 'src/components/Tooltip/Tooltip'
@@ -28,10 +29,30 @@ type UpdateParams = {
 
 const OrderCard = ({ order, selected, refetch, setListIds, handleSelectProduct }: Props) => {
   const { shopId } = useParams()
-  console.log(order)
+  // console.log(order)
   const storeProductMutation = useMutation({
     mutationFn: (data: UpdateParams) => productApi.updateStoreProduct(data.productId, data.body)
   })
+
+  const orderMutation = useMutation({ mutationFn: storeApi.updateOrderStatus })
+
+  const handleCancel = async () => {
+    console.log('alo')
+    await orderMutation.mutateAsync(
+      { orderId: order?._id, status: 'cancelled' },
+      {
+        onSuccess(data) {
+          toast.error('Order cancelled', { autoClose: 1000 })
+          refetch()
+        },
+        onError(error) {
+          if (isAxiosError(error)) {
+            toast.error((error.response?.data as string) || '')
+          }
+        }
+      }
+    )
+  }
 
   const handleChangeProductStatus = async (data: UpdateParams) => {
     await storeProductMutation.mutateAsync(data, {
@@ -100,7 +121,9 @@ const OrderCard = ({ order, selected, refetch, setListIds, handleSelectProduct }
       </Link>
 
       <div className='flex items-center justify-between gap-2 border-t bg-gray-50 px-6 py-4 pt-3'>
-        {order.status === OrderStatus[0].id && <CustomButton type='danger' title='Cancel order' />}
+        {order.status === OrderStatus[0].id && (
+          <CustomButton type='danger' title='Cancel order' handleClick={handleCancel} />
+        )}
         {order.status === OrderStatus[1].id ||
           (order.status === OrderStatus[2].id && <CustomButton type='outline' title='Contact seller' />)}
         {order.status === OrderStatus[3].id && <CustomButton type='filled' title='Rate' />}
